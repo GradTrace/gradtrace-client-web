@@ -89,13 +89,11 @@ export default function NilaiUlangan() {
                 <div class="">
                   <div>
                     <p class="fw-bold mb-1">John Doe</p>
-                    <p class="text-muted mb-0">john.doe@gmail.com</p>
                   </div>
                 </div>
               </td>
               <td>
                 <p class="fw-normal mb-1">Software engineer</p>
-                <p class="text-muted mb-0">IT department</p>
               </td>
               <td>active</td>
               <td>Senior</td>
