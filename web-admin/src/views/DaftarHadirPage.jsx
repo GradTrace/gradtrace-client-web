@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 export default function DaftarHadirPage() {
   const attendance = useSelector((state) => {
-    return state.attendance;
+    return state.teacherReducer.attendance;
   });
   console.log(attendance);
   const dispatch = useDispatch();
