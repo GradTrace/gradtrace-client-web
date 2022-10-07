@@ -1,4 +1,62 @@
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
 export default function NilaiUlangan() {
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Edit Student Data Here
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form>
+            <div class="field">
+              <label className="label">Email address</label>
+              <input class="form-control" placeholder="Enter email"></input>
+            </div>
+            <div class="field">
+              <label className="label">Password</label>
+              <input class="form-control" placeholder="Password"></input>
+            </div>
+            <div class="field">
+              <label className="label">Password</label>
+              <input class="form-control" placeholder="Password"></input>
+            </div>
+            <div class="field">
+              <label className="label">Password</label>
+              <input class="form-control" placeholder="Password"></input>
+            </div>
+            <div class="field">
+              <label className="label">Password</label>
+              <input class="form-control" placeholder="Password"></input>
+            </div>
+            <div class="field">
+              <label className="label">Password</label>
+              <input class="form-control" placeholder="Password"></input>
+            </div>
+            <div className="field">
+              <button type="submit" class="button is-success">
+                Submit
+              </button>
+              <button type="submit" class="button">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+  const [modalShow, setModalShow] = React.useState(false);
+  // end of modal
   return (
     <div>
       <br />
@@ -8,13 +66,13 @@ export default function NilaiUlangan() {
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light text-align-center">
             <tr>
-              <th>Photo</th>
-              <th>Name</th>
-              <th>Title</th>
-              <th>Kelas</th>
-              <th>Nilai UTS</th>
-              <th>Nilai UAS</th>
-              <th>Actions</th>
+              <th class="text-center">Photo</th>
+              <th class="text-center">Name</th>
+              <th class="text-center">Title</th>
+              <th class="text-center">Kelas</th>
+              <th class="text-center">Nilai UTS</th>
+              <th class="text-center">Nilai UAS</th>
+              <th class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -43,9 +101,18 @@ export default function NilaiUlangan() {
               <td>Senior</td>
               <td>Senior</td>
               <td>
-                <button type="submit" class="button is-info is-small mr-1 p-2">
+                <button
+                  type="submit"
+                  class="button is-info is-small mr-1 p-2"
+                  variant="primary"
+                  onClick={() => setModalShow(true)}
+                >
                   Edit Data
                 </button>
+                <MyVerticallyCenteredModal
+                  show={modalShow}
+                  onHide={() => setModalShow(false)}
+                />
               </td>
             </tr>
           </tbody>
