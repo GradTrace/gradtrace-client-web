@@ -4,19 +4,6 @@ import Swal from "sweetalert2";
 export default function Navbar() {
   const navigate = useNavigate();
 
-  //   const logout = (e) => {
-  //     e.preventDefault();
-  //     localStorage.clear();
-  //     navigate("/login");
-  //     Swal.fire({
-  //       position: "top-end",
-  //       icon: "success",
-  //       title: "Good Bye ...",
-  //       showConfirmButton: false,
-  //       timer: 1500,
-  //     });
-  //   };
-
   return (
     <div>
       <nav class="navbar sticky-top shadow navbar-expand-lg navbar-light bg-light">
@@ -81,6 +68,27 @@ export default function Navbar() {
                 >
                   Daftar Hadir
                 </Link>
+              </li>
+              <li class="nav-item">
+                <a
+                  onClick={(e) => {
+                    console.log("masuk");
+                    e.preventDefault();
+                    localStorage.clear();
+                    navigate("/login");
+                    Swal.fire({
+                      position: "top-end",
+                      icon: "success",
+                      title: `Logout ..`,
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                  }}
+                  class="nav-link active"
+                  aria-current="page"
+                >
+                  Log Out
+                </a>
               </li>
             </ul>
           </div>
