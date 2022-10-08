@@ -1,4 +1,52 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 export default function Login() {
+  const [login, setLogin] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const loginken = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:3000/teachers/login", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: login.email,
+        password: login.password,
+      }),
+    })
+      .then((result) => {
+        if (!result.ok) {
+          throw { name: "error login" };
+        }
+        return result.json();
+      })
+      .then((data) => {
+        localStorage.setItem("access_token", data.access_token);
+        navigate("/");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `Welcome ${data.loggedInName}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Invalid email or password",
+        });
+      });
+  };
+
   return (
     <main>
       <div class="container">
@@ -23,24 +71,33 @@ export default function Login() {
                         Login to Your Account
                       </h5>
                       <p class="text-center small">
-                        Enter your username & password to login
+                        Enter your Email & password to login
                       </p>
                     </div>
 
-                    <form class="row g-3 needs-validation" novalidate>
+                    <form
+                      onSubmit={loginken}
+                      class="row g-3 needs-validation"
+                      novalidate
+                    >
                       <div class="col-12">
                         <label for="yourUsername" class="form-label">
-                          Username
+                          Email
                         </label>
                         <div class="input-group has-validation">
                           <span class="input-group-text" id="inputGroupPrepend">
                             @
                           </span>
                           <input
-                            type="text"
-                            name="username"
+                            onChange={(e) => {
+                              setLogin({
+                                ...login,
+                                email: e.target.value,
+                              });
+                            }}
+                            type="email"
+                            name="email"
                             class="form-control"
-                            id="yourUsername"
                             required
                           />
                           <div class="invalid-feedback">
@@ -54,6 +111,12 @@ export default function Login() {
                           Password
                         </label>
                         <input
+                          onChange={(e) => {
+                            setLogin({
+                              ...login,
+                              password: e.target.value,
+                            });
+                          }}
                           type="password"
                           name="password"
                           class="form-control"
