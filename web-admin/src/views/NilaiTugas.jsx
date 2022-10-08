@@ -173,7 +173,8 @@ export default function NilaiTugas() {
   return (
     <div className="container mt-2">
       <div className="row">
-        <h2>NilaiTugas</h2>;
+        <h2>Nilai Tugas</h2>
+
         <div class="col-12 table-responsive">
           <table class="table table-striped align-middle">
             <thead class="thead-dark">
@@ -183,19 +184,19 @@ export default function NilaiTugas() {
                 <th scope="col">Kelas</th>
                 <th scope="col">Deadline</th>
                 <th scope="col">Description</th>
-                <th>Actions</th>
+                <th style={{ textAlign: "center" }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {assignment.map((el, i) => {
                 return (
-                  <tr key={el.id}>
+                  <tr style={{ textAlign: "left" }} key={el.id}>
                     <td>{i + 1}</td>
                     <td>{el.name}</td>
                     <td>{el.className}</td>
                     <td>{el.deadline}</td>
                     <td>{el.description}</td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <a href="">
                         <button class="m-2 btn btn-primary">Delete</button>
                       </a>

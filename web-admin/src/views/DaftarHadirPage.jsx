@@ -48,32 +48,23 @@ export default function DaftarHadirPage() {
 
       <div class="row">
         <div class="col-12 table-responsive">
-          <table class="table table-striped align-middle">
-            <thead class="thead-dark">
+          <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light text-align-center">
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Kelas</th>
                 <th scope="col">Status</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {attendance.map((el, i) => {
                 return (
-                  <tr key={el.id}>
+                  <tr style={{ textAlign: "left" }} key={el.id}>
                     <td>{i + 1}</td>
                     <td>{el.Student.fullName}</td>
                     <td>{el.Student.className}</td>
                     <td>{el.status == true ? "Masuk" : "belum masuk"}</td>
-                    <td>
-                      <a href="">
-                        <button class="m-2 btn btn-primary">Delete</button>
-                      </a>
-                      <a href="">
-                        <button class="btn btn-primary">Edit</button>
-                      </a>
-                    </td>
                   </tr>
                 );
               })}
