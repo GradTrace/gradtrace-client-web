@@ -1,4 +1,54 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 export default function Register() {
+  const navigate = useNavigate();
+  const [register, setRegister] = useState({
+    fullName: "",
+    CourseId: "",
+    email: "",
+    password: "",
+  });
+  const registerken = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:3000/teachers/register", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: register.email,
+        password: register.password,
+        fullName: register.fullName,
+        CourseId: register.CourseId,
+      }),
+    })
+      .then((result) => {
+        if (!result.ok) {
+          throw { name: "error login" };
+        }
+        return result.json();
+      })
+      .then((data) => {
+        navigate("/login");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `Success Registered`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        // Swal.fire({
+        //   icon: "error",
+        //   title: "Oops...",
+        //   text: "Invalid email or password",
+        // });
+      });
+  };
+
   return (
     <div class="container">
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
@@ -25,14 +75,24 @@ export default function Register() {
                     </p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form
+                    onSubmit={registerken}
+                    class="row g-3 needs-validation"
+                    novalidate
+                  >
                     <div class="col-12">
                       <label for="yourName" class="form-label">
                         Your Name
                       </label>
                       <input
+                        onChange={(e) => {
+                          setRegister({
+                            ...register,
+                            fullName: e.target.value,
+                          });
+                        }}
                         type="text"
-                        name="name"
+                        name="fullName"
                         class="form-control"
                         id="yourName"
                         required
@@ -43,10 +103,40 @@ export default function Register() {
                     </div>
 
                     <div class="col-12">
+                      <label for="yourUsername" class="form-label">
+                        Course
+                      </label>
+                      <select
+                        name="CourseId"
+                        onChange={(e) => {
+                          setRegister({
+                            ...register,
+                            CourseId: e.target.value,
+                          });
+                        }}
+                        class="form-select"
+                        aria-label="Default select example"
+                      >
+                        <option selected disabled>
+                          Open this select Course
+                        </option>
+                        <option value="1">Mathematics</option>
+                        <option value="2">Biology</option>
+                        <option value="3">English</option>
+                      </select>
+                    </div>
+
+                    <div class="col-12">
                       <label for="yourEmail" class="form-label">
                         Your Email
                       </label>
                       <input
+                        onChange={(e) => {
+                          setRegister({
+                            ...register,
+                            email: e.target.value,
+                          });
+                        }}
                         type="email"
                         name="email"
                         class="form-control"
@@ -59,31 +149,16 @@ export default function Register() {
                     </div>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">
-                        Username
-                      </label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">
-                          @
-                        </span>
-                        <input
-                          type="text"
-                          name="username"
-                          class="form-control"
-                          id="yourUsername"
-                          required
-                        />
-                        <div class="invalid-feedback">
-                          Please choose a username.
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-12">
                       <label for="yourPassword" class="form-label">
                         Password
                       </label>
                       <input
+                        onChange={(e) => {
+                          setRegister({
+                            ...register,
+                            password: e.target.value,
+                          });
+                        }}
                         type="password"
                         name="password"
                         class="form-control"
