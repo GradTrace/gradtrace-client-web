@@ -8,6 +8,10 @@ function assignmentReducer(state = initialState, action) {
       return { ...state, assignment: action.payload };
     case "addAssignment":
       return { ...state };
+    case "deleteAssignment":
+      return { ...state };
+    case "editAssignment":
+      return { ...state };
 
     default:
       return state;
