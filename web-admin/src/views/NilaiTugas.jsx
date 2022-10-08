@@ -39,7 +39,7 @@ export default function NilaiTugas() {
         })
       ).then(() => {
         navigate("/nilaiTugas");
-        dispatch(handleClose());
+        dispatch(setShow(false));
       });
     };
 
