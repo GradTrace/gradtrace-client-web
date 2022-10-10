@@ -8,6 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import { addingAssignment } from "../store/actions/actionAssignment";
 import { deletedAssignment } from "../store/actions/actionAssignment";
 import { editAssignment } from "../store/actions/actionAssignment";
+import Swal from "sweetalert2";
 
 export default function NilaiTugas() {
   const navigate = useNavigate();
@@ -19,6 +20,13 @@ export default function NilaiTugas() {
   useEffect(() => {
     dispatch(fetchAssignment());
   }, []);
+  const [add, setAdd] = useState({
+    description: "",
+    CourseId: "",
+    deadline: "",
+    name: "",
+    className: "",
+  });
   const [editSatu, setEditSatu] = useState({
     description: "",
     CourseId: "",
@@ -35,335 +43,50 @@ export default function NilaiTugas() {
   console.log(editSatu, "ini data");
   console.log(idi.id, "idddd");
   useEffect(() => {
-    fetch(`http://localhost:3000/teachers/assignment/${idi.id}`, {
-      headers: {
-        access_token: localStorage.getItem("access_token"),
-      },
-    })
-      .then((response) => {
-        console.log(response, "<<< response");
-        if (!response.ok) {
-          throw new Error("Something Error Fetch assignmentn");
-        }
-        return response.json();
+    if (idi.id !== 0) {
+      fetch(`http://localhost:3000/teachers/assignment/${idi.id}`, {
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
       })
-      .then((data) => {
-        console.log(data, "ini data satuan");
-        setEditSatu({
-          description: data.description,
-          CourseId: data.CourseId,
-          deadline: data.deadline,
-          name: data.name,
-          className: data.className,
+        .then((response) => {
+          console.log(response, "<<< response");
+          if (!response.ok) {
+            throw new Error("Something Error Fetch assignmentn");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data, "ini data satuan");
+
+          // console.log(data.deadline, "<<< deadline");
+          const rubahDeadline = data.deadline.split("T")[0];
+          console.log(rubahDeadline, "<<<<< rubah deadline");
+          setEditSatu({
+            description: data.description,
+            CourseId: data.CourseId,
+            deadline: rubahDeadline,
+            name: data.name,
+            className: data.className,
+          });
         });
-      });
+    }
   }, [idi]);
+
   console.log(editSatu, "<<<<<");
-
-  function Example() {
-    const [add, setAdd] = useState({
-      description: "",
-      CourseId: "",
-      deadline: "",
-      name: "",
-      className: "",
-    });
-    const added = (e) => {
-      e.preventDefault();
-      console.log(add);
-      dispatch(
-        addingAssignment({
-          description: add.description,
-          CourseId: add.CourseId,
-          deadline: add.deadline,
-          name: add.name,
-          className: add.className,
-        })
-      ).then(() => {
-        navigate("/nilaiTugas");
-        dispatch(setShow(false));
-      });
-    };
-
-    return (
-      <>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Assignment</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <form onSubmit={added}>
-              <div class="field">
-                <label className="label">Description</label>
-                <input
-                  name="description"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      description: e.target.value,
-                    });
-                  }}
-                  class="form-control"
-                  placeholder="Enter Description"
-                />
-              </div>
-              {/* <div class="field">
-                <label className="label">Courses</label>
-                <select
-                  name="CourseId"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      CourseId: e.target.value,
-                    });
-                  }}
-                  class="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected disabled>
-                    Choose Courses
-                  </option>
-                  <option value="1">Mathematics</option>
-                  <option value="2">Biology</option>
-                  <option value="3">English</option>
-                </select>
-              </div> */}
-              <div class="field">
-                <label className="label">Deadline</label>
-                <input
-                  name="deadline"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      deadline: e.target.value,
-                    });
-                  }}
-                  type="date"
-                  class="form-control"
-                  placeholder="Deadline"
-                ></input>
-              </div>
-              <div class="field">
-                <label className="label">Name</label>
-                <input
-                  name="name"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      name: e.target.value,
-                    });
-                  }}
-                  class="form-control"
-                  placeholder="name"
-                ></input>
-              </div>
-              <div class="field">
-                <label className="label">Class Name</label>
-                <select
-                  name="className"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      className: e.target.value,
-                    });
-                  }}
-                  class="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected disabled>
-                    Choose Class
-                  </option>
-                  <option value="9">9</option>
-                  <option value="8">8</option>
-                  <option value="7">7</option>
-                </select>
-              </div>
-
-              <div className="field">
-                <div className="div mt-2">
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="m-2"
-                    variant="primary"
-                    // onClick={handleClose}
-                  >
-                    Save Changes
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </Modal.Body>
-          {/* <Modal.Footer></Modal.Footer> */}
-        </Modal>
-      </>
-    );
-  }
-  function EditModal() {
-    const [edit, setEdit] = useState({
-      description: "",
-      CourseId: "",
-      deadline: "",
-      name: "",
-      className: "",
-    });
-    const editKen = (e) => {
-      e.preventDefault();
-
-      dispatch(
-        editAssignment({
-          description: edit.description,
-          CourseId: edit.CourseId,
-          deadline: edit.deadline,
-          name: edit.name,
-          className: edit.className,
-        })
-      ).then(() => {
-        navigate("/nilaiTugas");
-        dispatch(setShow(false));
-      });
-    };
-
-    return (
-      <>
-        <Modal show={editshow} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Assignment</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <form onSubmit={editKen}>
-              <div class="field">
-                <label className="label">Description</label>
-                <input
-                  value={editSatu.description}
-                  name="description"
-                  onChange={(e) => {
-                    setEdit({
-                      ...edit,
-                      description: e.target.value,
-                    });
-                  }}
-                  class="form-control"
-                  placeholder="Enter Description"
-                />
-              </div>
-              {/* <div class="field">
-                <label className="label">Courses</label>
-                <select
-                  name="CourseId"
-                  onChange={(e) => {
-                    setEdit({
-                      ...edit,
-                      CourseId: e.target.value,
-                    });
-                  }}
-                  class="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected disabled>
-                    Choose Courses
-                  </option>
-                  <option value="1">Mathematics</option>
-                  <option value="2">Biology</option>
-                  <option value="3">English</option>
-                </select>
-              </div> */}
-              <div class="field">
-                <label className="label">Deadline</label>
-                <input
-                
-                  value={editSatu.deadline}
-                  name="deadline"
-                  onChange={(e) => {
-                    setEdit({
-                      ...edit,
-                      deadline: e.target.value,
-                    });
-                  }}
-                  type="date"
-                  class="form-control"
-                  placeholder="Deadline"
-                ></input>
-              </div>
-              <div class="field">
-                <label className="label">Name</label>
-                <input
-                  value={editSatu.name}
-                  name="name"
-                  onChange={(e) => {
-                    setEdit({
-                      ...edit,
-                      name: e.target.value,
-                    });
-                  }}
-                  class="form-control"
-                  placeholder="name"
-                ></input>
-              </div>
-              <div class="field">
-                <label className="label">Class Name</label>
-                <select
-                  value={editSatu.className}
-                  name="className"
-                  onChange={(e) => {
-                    setEdit({
-                      ...edit,
-                      className: e.target.value,
-                    });
-                  }}
-                  class="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected disabled>
-                    Choose Class
-                  </option>
-                  <option value="9">9</option>
-                  <option value="8">8</option>
-                  <option value="7">7</option>
-                </select>
-              </div>
-
-              <div className="field">
-                <div className="div mt-2">
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="m-2"
-                    variant="primary"
-                    // onClick={handleClose}
-                  >
-                    Save Changes
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </Modal.Body>
-          {/* <Modal.Footer></Modal.Footer> */}
-        </Modal>
-      </>
-    );
-  }
 
   const [show, setShow] = useState(false);
   const [editshow, seteditShow] = useState(false);
-  const handleClose = (e) => {
-    e.preventDefault();
-    setShow(false);
+  const handleClose = () => {
     seteditShow(false);
   };
+  const handleCloseAdd = () => {
+    setShow(false);
+  };
 
-  const handleShow = (e) => {
-    e.preventDefault();
+  const handleShow = () => {
     setShow(true);
   };
-  // const handleEditShow = (e) => {
-  //   e.preventDefault();
-  //   seteditShow(true);
-  // };
 
   if (!assignment) {
     return <h2>Loading ..</h2>;
@@ -374,9 +97,9 @@ export default function NilaiTugas() {
       <div className="row">
         <h2>Nilai Tugas</h2>
 
-        <div class="col-12 table-responsive">
-          <table class="table table-striped align-middle">
-            <thead class="thead-dark">
+        <div className="col-12 table-responsive">
+          <table className="table table-striped align-middle">
+            <thead className="thead-dark">
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
@@ -393,58 +116,319 @@ export default function NilaiTugas() {
                     <td>{i + 1}</td>
                     <td>{el.name}</td>
                     <td>{el.className}</td>
-                    <td>{el.deadline}</td>
+                    <td>{el.deadline.split("T")[0]}</td>
                     <td>{el.description}</td>
                     <td style={{ textAlign: "center" }}>
-                      <a href="">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            dispatch(deletedAssignment({ id: el.id })).then(
-                              () => {
-                                navigate("/nilaiTugas");
-                                dispatch(fetchAssignment());
-                              }
-                            );
-                          }}
-                          class="m-2 btn btn-primary"
-                        >
-                          Delete
-                        </button>
-                      </a>
-                      <a href="">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            seteditShow(true);
-                            setIdi({
-                              ...idi,
-                              id: el.id,
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch(deletedAssignment({ id: el.id }))
+                            .then(() => {
+                              navigate("/nilaiTugas");
+                              dispatch(fetchAssignment());
+                            })
+                            .then(() => {
+                              Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Success Deleted ..",
+                                showConfirmButton: false,
+                                timer: 1500,
+                              });
                             });
-                          }}
-                          class="btn btn-primary"
-                        >
-                          Edit
-                        </button>
-                      </a>
-                      <a href="">
-                        <button
-                          onClick={handleShow}
-                          class="btn m-2 btn-primary"
-                        >
-                          Add Assignment
-                        </button>
-                      </a>
+                        }}
+                        className="m-2 btn btn-primary"
+                      >
+                        Delete
+                      </button>
+
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          seteditShow(true);
+                          setIdi({
+                            ...idi,
+                            id: el.id,
+                          });
+                        }}
+                        className="btn btn-primary"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        onClick={handleShow}
+                        className="btn m-2 btn-primary"
+                      >
+                        Add Assignment
+                      </button>
                     </td>
                   </tr>
                 );
               })}
             </tbody>
-            <Example show={show} onHide={() => setShow(false)} />
-            <EditModal show={show} onHide={() => setShow(false)} />
+            <AddModal
+              add={add}
+              setAdd={setAdd}
+              show={show}
+              handleCloseAdd={handleCloseAdd}
+            />
+            <EditModal
+              id={idi.id}
+              editSatu={editSatu}
+              editShow={editshow}
+              handleClose={handleClose}
+              setEditSatu={setEditSatu}
+            />
           </table>
         </div>
       </div>
     </div>
+  );
+}
+function EditModal(props) {
+  const { id, editSatu, editShow, handleClose, setEditSatu } = props;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const editKen = (e) => {
+    e.preventDefault();
+    console.log(editSatu, "<<< data edit");
+    dispatch(
+      editAssignment({
+        id: id,
+        description: editSatu.description,
+        CourseId: editSatu.CourseId,
+        deadline: editSatu.deadline,
+        name: editSatu.name,
+        className: editSatu.className,
+      })
+    ).then(() => {
+      // navigate("/nilaiTugas");
+      handleClose();
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Success Edited ..",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
+  };
+
+  return (
+    <>
+      <Modal show={editShow} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Assignment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={editKen}>
+            <div className="field">
+              <label className="label">Description</label>
+              <input
+                name="description"
+                value={editSatu.description}
+                onChange={(e) => {
+                  setEditSatu({
+                    ...editSatu,
+                    description: e.target.value,
+                  });
+                }}
+                className="form-control"
+                placeholder="Enter Description"
+              />
+            </div>
+
+            <div className="field">
+              <label className="label">Deadline</label>
+              <input
+                value={editSatu.deadline}
+                name="deadline"
+                onChange={(e) => {
+                  setEditSatu({
+                    ...editSatu,
+                    deadline: e.target.value,
+                  });
+                }}
+                type="date"
+                className="form-control"
+                placeholder="Deadline"
+              ></input>
+            </div>
+            <div className="field">
+              <label className="label">Name</label>
+              <input
+                value={editSatu.name}
+                name="name"
+                onChange={(e) => {
+                  setEditSatu({
+                    ...editSatu,
+                    name: e.target.value,
+                  });
+                }}
+                className="form-control"
+                placeholder="name"
+              ></input>
+            </div>
+            <div className="field">
+              <label className="label">Class Name</label>
+              <select
+                value={editSatu.className}
+                name="className"
+                onChange={(e) => {
+                  setEditSatu({
+                    ...editSatu,
+                    className: e.target.value,
+                  });
+                }}
+                className="form-select"
+                aria-label="Default select example"
+              >
+                <option selected disabled>
+                  Choose Class
+                </option>
+                <option value="9">9</option>
+                <option value="8">8</option>
+                <option value="7">7</option>
+              </select>
+            </div>
+
+            <div className="field">
+              <div className="div mt-2">
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button type="submit" className="m-2" variant="primary">
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+}
+function AddModal(props) {
+  const dispatch = useDispatch();
+  const { show, handleCloseAdd, add, setAdd } = props;
+
+  const added = (e) => {
+    e.preventDefault();
+    dispatch(
+      addingAssignment({
+        description: add.description,
+        CourseId: add.CourseId,
+        deadline: add.deadline,
+        name: add.name,
+        className: add.className,
+      })
+    ).then(() => {
+      handleCloseAdd();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Success Added ..",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
+  };
+
+  return (
+    <>
+      <Modal show={show} onHide={handleCloseAdd}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Assignment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={added}>
+            <div className="field">
+              <label className="label">Description</label>
+              <input
+                name="description"
+                onChange={(e) => {
+                  setAdd({
+                    ...add,
+                    description: e.target.value,
+                  });
+                }}
+                className="form-control"
+                placeholder="Enter Description"
+              />
+            </div>
+
+            <div className="field">
+              <label className="label">Deadline</label>
+              <input
+                name="deadline"
+                onChange={(e) => {
+                  setAdd({
+                    ...add,
+                    deadline: e.target.value,
+                  });
+                }}
+                type="date"
+                className="form-control"
+                placeholder="Deadline"
+              ></input>
+            </div>
+            <div className="field">
+              <label className="label">Name</label>
+              <input
+                name="name"
+                onChange={(e) => {
+                  setAdd({
+                    ...add,
+                    name: e.target.value,
+                  });
+                }}
+                className="form-control"
+                placeholder="name"
+              ></input>
+            </div>
+            <div className="field">
+              <label className="label">Class Name</label>
+              <select
+                name="className"
+                onChange={(e) => {
+                  setAdd({
+                    ...add,
+                    className: e.target.value,
+                  });
+                }}
+                className="form-select"
+                aria-label="Default select example"
+              >
+                <option selected disabled>
+                  Choose Class
+                </option>
+                <option value="9">9</option>
+                <option value="8">8</option>
+                <option value="7">7</option>
+              </select>
+            </div>
+
+            <div className="field">
+              <div className="div mt-2">
+                <Button variant="secondary" onClick={handleCloseAdd}>
+                  Close
+                </Button>
+                <Button
+                  type="submit"
+                  className="m-2"
+                  variant="primary"
+                  // onClick={handleClose}
+                >
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
