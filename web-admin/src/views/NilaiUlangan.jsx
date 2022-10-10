@@ -44,13 +44,17 @@ export default function NilaiUlangan() {
   const [modalShow, setModalShow] = React.useState(false);
   // end of modal
   const dispatch = useDispatch();
-  const dataRedux = useSelector((state) => {
-    console.log(state);
-    // return state.homeReducer.reducerHomeData;
+  const examScore = useSelector((state) => {
+    return state;
   });
+  console.log(examScore);
   useEffect(() => {
     dispatch(fetchExamScore());
   }, []);
+  if (!examScore) {
+    return <h2>Loading...</h2>;
+  }
+
   return (
     <div>
       <br />
