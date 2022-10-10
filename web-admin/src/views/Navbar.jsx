@@ -19,8 +19,15 @@ export default function Navbar() {
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+          <div class="collapse  navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav alignSelf-center">
+              <a class="navbar-brand" href="#">
+                <img
+                  src="https://i.imgur.com/qXK2RMo.png"
+                  width="100"
+                  height="40"
+                />
+              </a>
               <li class="nav-item">
                 <Link
                   to={"/register"}
@@ -46,15 +53,6 @@ export default function Navbar() {
                   to={"/nilaiUlangan"}
                 >
                   Nilai Ulangan
-                </Link>
-              </li>
-              <li class="nav-item">
-                <Link
-                  class="nav-link active"
-                  aria-current="page"
-                  to={"/uploadTugas"}
-                >
-                  Upload Tugas
                 </Link>
               </li>
               <li class="nav-item">
