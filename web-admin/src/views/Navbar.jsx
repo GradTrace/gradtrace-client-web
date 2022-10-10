@@ -43,7 +43,16 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/nilaiTugas"}
                 >
-                  Nilai Tugas
+                  Tugas
+                </Link>
+              </li>
+              <li class="nav-item">
+                <Link
+                  class="nav-link active"
+                  aria-current="page"
+                  to={"/daftarTugas"}
+                >
+                  Daftar Tugas
                 </Link>
               </li>
               <li class="nav-item">

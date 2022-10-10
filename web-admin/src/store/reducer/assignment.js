@@ -12,6 +12,8 @@ function assignmentReducer(state = initialState, action) {
       return { ...state };
     case "editAssignment":
       return { ...state };
+    case "editAssignmentScore":
+      return { ...state };
 
     default:
       return state;
