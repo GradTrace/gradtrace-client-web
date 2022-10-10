@@ -7,6 +7,7 @@ import Home from "../components/Home";
 import NilaiTugas from "../views/NilaiTugas";
 import NilaiUlangan from "../views/NilaiUlangan";
 import DaftarHadirPage from "../views/DaftarHadirPage";
+import DaftarTugas from "../views/DatfarTugas";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
           {
             path: "/",
             element: <NilaiTugas />,
+          },
+          {
+            path: "/daftarTugas",
+            element: <DaftarTugas />,
           },
         ],
       },

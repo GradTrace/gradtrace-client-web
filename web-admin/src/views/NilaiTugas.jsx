@@ -16,6 +16,7 @@ export default function NilaiTugas() {
   const assignment = useSelector((state) => {
     return state.assignmentReducer.assignment;
   });
+  console.log(assignment, "data");
   useEffect(() => {
     dispatch(fetchAssignment());
   }, []);
@@ -380,11 +381,11 @@ export default function NilaiTugas() {
   return (
     <div className="container mt-2">
       <div className="row">
-        <h2>Nilai Tugas</h2>
+        <h2> Tugas</h2>
 
         <div className="col-12 table-responsive">
-          <table className="table table-striped align-middle">
-            <thead className="thead-dark">
+          <table className="table table-striped align-middle bg-white ">
+            <thead className="thead-dark bg-white">
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
