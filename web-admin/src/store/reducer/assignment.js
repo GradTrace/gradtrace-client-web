@@ -1,11 +1,14 @@
 const initialState = {
   assignment: [],
+  assignments: [],
 };
 
 function assignmentReducer(state = initialState, action) {
   switch (action.type) {
     case "getAssignment":
       return { ...state, assignment: action.payload };
+    case "getAssignments":
+      return { ...state, assignments: action.payload };
     case "addAssignment":
       return { ...state };
     case "deleteAssignment":

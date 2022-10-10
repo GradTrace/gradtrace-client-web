@@ -13,6 +13,7 @@ export default function DaftarTugas() {
   const assignment = useSelector((state) => {
     return state.assignmentReducer.assignment;
   });
+
   useEffect(() => {
     dispatch(fetchAssignment());
   }, []);
@@ -62,11 +63,77 @@ export default function DaftarTugas() {
     console.log("handle show");
   };
 
+  const [kelas, setKelas] = useState({
+    className: "",
+  });
+  let id = kelas.className;
+  useEffect(() => {
+    dispatch(fetchAssignment(id));
+  }, [kelas]);
+  console.log(kelas);
+
+  const inputHandler = (e) => {
+    setName({
+      name: e.target.value,
+    });
+  };
+  const [name, setName] = useState({
+    name: "",
+  });
+  let dataFilter = assignment.filter((el) => (el.name === name ? el.name : el));
+
+  const filtering = (e) => {
+    e.preventDefault();
+    console.log(name);
+  };
+  console.log(dataFilter, "<<<< data filterran");
   return (
     <div className="container mt-2">
       <div className="row">
         <h2>Assignment Student</h2>
-
+        <div className="container">
+          <div className="row">
+            <label htmlFor=""> filter by Class</label>
+            <select
+              name="className"
+              onChange={(e) => {
+                setKelas({
+                  ...kelas,
+                  className: e.target.value,
+                });
+              }}
+              class="form-select"
+              aria-label="Default select example"
+            >
+              <option selected disabled>
+                Open this select menu
+              </option>
+              <option value="9">9</option>
+              <option value="8">8</option>
+              <option value="7">7</option>
+            </select>
+            <form onSubmit={filtering} action="">
+              <div class="input-group mt-3 d-flex justify-content-center">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="submit"
+                  id="button-addon1"
+                >
+                  Search
+                </button>
+                <input
+                  name="search"
+                  onChange={inputHandler}
+                  type="text"
+                  class="form-control"
+                  placeholder=""
+                  aria-label="Example text with button addon"
+                  aria-describedby="button-addon1"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
         <div className="col-12 table-responsive">
           <table className="table table-striped align-middle bg-white ">
             <thead className="thead-dark bg-white">
@@ -83,7 +150,7 @@ export default function DaftarTugas() {
               </tr>
             </thead>
             <tbody>
-              {assignment.map((el, i) => {
+              {dataFilter.map((el, i) => {
                 return (
                   <tr style={{ textAlign: "left" }} key={el.id}>
                     <td>{i + 1}</td>

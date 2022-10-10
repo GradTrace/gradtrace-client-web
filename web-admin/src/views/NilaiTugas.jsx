@@ -1,4 +1,4 @@
-import { fetchAssignment } from "../store/actions/actionAssignment";
+import { fetchAssignmentGuru } from "../store/actions/actionAssignment";
 import { useEffect, useSelect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,12 +13,12 @@ import Swal from "sweetalert2";
 export default function NilaiTugas() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const assignment = useSelector((state) => {
-    return state.assignmentReducer.assignment;
+  const assignments = useSelector((state) => {
+    return state.assignmentReducer.assignments;
   });
-  console.log(assignment, "data");
+  // console.log(assignment, "data");
   useEffect(() => {
-    dispatch(fetchAssignment());
+    dispatch(fetchAssignmentGuru());
   }, []);
   const [add, setAdd] = useState({
     description: "",
@@ -374,7 +374,7 @@ export default function NilaiTugas() {
     setShow(true);
   };
 
-  if (!assignment) {
+  if (!assignments) {
     return <h2>Loading ..</h2>;
   }
 
@@ -396,7 +396,7 @@ export default function NilaiTugas() {
               </tr>
             </thead>
             <tbody>
-              {assignment.map((el, i) => {
+              {assignments.map((el, i) => {
                 return (
                   <tr style={{ textAlign: "left" }} key={el.id}>
                     <td>{i + 1}</td>
@@ -411,7 +411,7 @@ export default function NilaiTugas() {
                           dispatch(deletedAssignment({ id: el.id }))
                             .then(() => {
                               navigate("/nilaiTugas");
-                              dispatch(fetchAssignment());
+                              dispatch(fetchAssignmentGuru());
                             })
                             .then(() => {
                               Swal.fire({

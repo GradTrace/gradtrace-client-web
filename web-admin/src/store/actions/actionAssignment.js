@@ -28,6 +28,12 @@ export const edittAssignmentScore = (payload) => {
     payload,
   };
 };
+export const getAssignmentTugasguru = (payload) => {
+  return {
+    type: "getAssignments",
+    payload,
+  };
+};
 
 export const addingAssignment = ({
   name,
@@ -123,7 +129,23 @@ export const editAssignment = ({
       });
   };
 };
-export const fetchAssignment = () => {
+export const fetchAssignment = (id) => {
+  return (dispatch) => {
+    return fetch(`http://localhost:3000/teachers/assignment?className=${id}`, {
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Something Error Fetch Attendance");
+        }
+        return response.json();
+      })
+      .then((data) => dispatch(getAssignment(data)));
+  };
+};
+export const fetchAssignmentGuru = () => {
   return (dispatch) => {
     return fetch(`http://localhost:3000/teachers/assignment`, {
       headers: {
@@ -136,7 +158,7 @@ export const fetchAssignment = () => {
         }
         return response.json();
       })
-      .then((data) => dispatch(getAssignment(data)));
+      .then((data) => dispatch(getAssignmentTugasguru(data)));
   };
 };
 export const deletedAssignment = ({ id }) => {
