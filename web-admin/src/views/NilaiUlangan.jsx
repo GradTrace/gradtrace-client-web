@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchExamScore } from "../store/actions/actionExam";
+import { useEffect } from "react";
 export default function NilaiUlangan() {
   function MyVerticallyCenteredModal(props) {
     return (
@@ -12,35 +14,19 @@ export default function NilaiUlangan() {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Title id="contained-modal-title-center">
             Edit Student Data Here
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form>
             <div class="field">
-              <label className="label">Email address</label>
-              <input class="form-control" placeholder="Enter email"></input>
+              <label className="label">Nilai UTS</label>
+              <input class="form-control" placeholder="Nilai UTS"></input>
             </div>
             <div class="field">
-              <label className="label">Password</label>
-              <input class="form-control" placeholder="Password"></input>
-            </div>
-            <div class="field">
-              <label className="label">Password</label>
-              <input class="form-control" placeholder="Password"></input>
-            </div>
-            <div class="field">
-              <label className="label">Password</label>
-              <input class="form-control" placeholder="Password"></input>
-            </div>
-            <div class="field">
-              <label className="label">Password</label>
-              <input class="form-control" placeholder="Password"></input>
-            </div>
-            <div class="field">
-              <label className="label">Password</label>
-              <input class="form-control" placeholder="Password"></input>
+              <label className="label">Nilai UAS</label>
+              <input class="form-control" placeholder="Nilai UAS"></input>
             </div>
             <div className="field">
               <button type="submit" class="button is-success">
@@ -57,6 +43,14 @@ export default function NilaiUlangan() {
   }
   const [modalShow, setModalShow] = React.useState(false);
   // end of modal
+  const dispatch = useDispatch();
+  const dataRedux = useSelector((state) => {
+    console.log(state);
+    // return state.homeReducer.reducerHomeData;
+  });
+  useEffect(() => {
+    dispatch(fetchExamScore());
+  }, []);
   return (
     <div>
       <br />
@@ -68,8 +62,8 @@ export default function NilaiUlangan() {
             <tr>
               <th class="text-center">Photo</th>
               <th class="text-center">Name</th>
-              <th class="text-center">Title</th>
               <th class="text-center">Kelas</th>
+              <th class="text-center">Mata Pelajaran</th>
               <th class="text-center">Nilai UTS</th>
               <th class="text-center">Nilai UAS</th>
               <th class="text-center">Actions</th>
@@ -86,23 +80,21 @@ export default function NilaiUlangan() {
                 />
               </td>
               <td>
-                <div class="">
+                <div>
                   <div>
-                    <p class="fw-bold mb-1">John Doe</p>
+                    <p>John Doe</p>
                   </div>
                 </div>
               </td>
               <td>
-                <p class="fw-normal mb-1">Software engineer</p>
+                <p>Software engineer</p>
               </td>
               <td>active</td>
               <td>Senior</td>
               <td>Senior</td>
               <td>
                 <button
-                  type="submit"
                   class="button is-info is-small mr-1 p-2"
-                  variant="primary"
                   onClick={() => setModalShow(true)}
                 >
                   Edit Data
