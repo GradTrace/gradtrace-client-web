@@ -54,6 +54,7 @@ export default function DaftarHadirPage() {
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Kelas</th>
+                <th scope="col">Tanggal</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
@@ -64,6 +65,7 @@ export default function DaftarHadirPage() {
                     <td>{i + 1}</td>
                     <td>{el.Student.fullName}</td>
                     <td>{el.Student.className}</td>
+                    <td>{el.dateAndTime.split("T")[0]}</td>
                     <td>{el.status == true ? "Masuk" : "belum masuk"}</td>
                   </tr>
                 );
