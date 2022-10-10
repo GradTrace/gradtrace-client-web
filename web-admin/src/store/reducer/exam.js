@@ -1,11 +1,11 @@
 const initialState = {
-  assignment: [],
+  examScore: [],
 };
 
 function examReducer(state = initialState, action) {
   switch (action.type) {
     case "getExamScore":
-      return { ...state, assignment: action.payload };
+      return { ...state, examScore: action.payload };
 
     default:
       return state;

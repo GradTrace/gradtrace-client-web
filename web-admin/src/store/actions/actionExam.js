@@ -5,7 +5,7 @@ export const getScore = (payload) => {
   };
 };
 
-export const fetchExamScore = ({ id }) => {
+export const fetchExamScore = () => {
   return (dispatch) => {
     return fetch(`http://localhost:3000/teachers/exams/score`, {
       headers: {
@@ -18,6 +18,10 @@ export const fetchExamScore = ({ id }) => {
         }
         return response.json();
       })
-      .then((data) => dispatch(fetchExamScore(data)));
+      .then((data) => {
+        console.log(data, "dari action exam");
+        dispatch(getScore(data));
+      })
+      .catch((err) => console.log(err));
   };
 };

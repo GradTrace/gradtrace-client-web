@@ -26,13 +26,13 @@ export default function NilaiTugas() {
     className: "",
   });
   const params = useParams();
-  console.log(params.id, "parramss");
+  // console.log(params.id, "parramss");
   const [idi, setIdi] = useState({
     id: 0,
   });
 
-  console.log(editSatu, "ini data");
-  console.log(idi.id, "idddd");
+  // console.log(editSatu, "ini data");
+  // console.log(idi.id, "idddd");
   useEffect(() => {
     fetch(`http://localhost:3000/teachers/assignment/${idi.id}`, {
       headers: {
@@ -40,7 +40,7 @@ export default function NilaiTugas() {
       },
     })
       .then((response) => {
-        console.log(response, "<<< response");
+        // console.log(response, "<<< response");
         if (!response.ok) {
           throw new Error("Something Error Fetch assignmentn");
         }
@@ -57,7 +57,7 @@ export default function NilaiTugas() {
         });
       });
   }, [idi]);
-  console.log(editSatu, "<<<<<");
+  // console.log(editSatu, "<<<<<");
 
   function Example() {
     const [add, setAdd] = useState({
@@ -69,7 +69,7 @@ export default function NilaiTugas() {
     });
     const added = (e) => {
       e.preventDefault();
-      console.log(add);
+      // console.log(add);
       dispatch(
         addingAssignment({
           description: add.description,
