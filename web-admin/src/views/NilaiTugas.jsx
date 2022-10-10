@@ -16,7 +16,6 @@ export default function NilaiTugas() {
   const assignment = useSelector((state) => {
     return state.assignmentReducer.assignment;
   });
-  console.log(assignment, "<<<");
   useEffect(() => {
     dispatch(fetchAssignment());
   }, []);
