@@ -8,9 +8,6 @@ export default function Navbar() {
     <div>
       <nav class="navbar sticky-top shadow navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <Link class="nav-link active" aria-current="page" to={"/"}>
-            Home Page
-          </Link>
           <button
             class="navbar-toggler"
             type="button"
