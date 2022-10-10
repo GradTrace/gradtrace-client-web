@@ -5,9 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { addingAssignment } from "../store/actions/actionAssignment";
-import { deletedAssignment } from "../store/actions/actionAssignment";
-import { editAssignment } from "../store/actions/actionAssignment";
+
+import { editAssignmentScores } from "../store/actions/actionAssignment";
+
 import Swal from "sweetalert2";
 export default function DaftarTugas() {
   const assignment = useSelector((state) => {
@@ -19,11 +19,15 @@ export default function DaftarTugas() {
   const [idi, setIdi] = useState({
     id: 0,
   });
-  const [id, setId] = useState({
-    id: 0,
+
+  const [edit, setEdit] = useState({
+    score: "",
+    id: "",
   });
+
+  console.log(idi, "ini id");
   useEffect(() => {
-    fetch(`http://localhost:3000/teachers/assignmentGrades/${id}`, {
+    fetch(`http://localhost:3000/teachers/assignmentGrades/${idi.id}`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },
@@ -36,12 +40,28 @@ export default function DaftarTugas() {
         return response.json();
       })
       .then((data) => {
+        setEdit({
+          score: data.score,
+          id: data.id,
+        });
         console.log(data, "ini data satuan");
       });
-  }, [id]);
+  }, [idi]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   console.log(assignment, "data");
+
+  const [editshow, seteditShow] = useState(false);
+
+  const handleClose = () => {
+    seteditShow(false);
+  };
+
+  const handleShow = () => {
+    seteditShow(true);
+    console.log("handle show");
+  };
+
   return (
     <div className="container mt-2">
       <div className="row">
@@ -76,104 +96,107 @@ export default function DaftarTugas() {
                     <td>{el.AssignmentGrades[0]?.url}</td>
                     <td style={{ textAlign: "center" }}>
                       <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          //   seteditShow(true);
+                        onClick={() => {
+                          console.log("masuk");
+
+                          seteditShow(true);
                           setIdi({
-                            ...id,
-                            id: el.id,
+                            ...idi,
+                            id: el.AssignmentGrades[0].id,
                           });
                         }}
                         className="btn btn-primary"
                       >
                         Edit
                       </button>
-                      {/* 
-                          <button
-                            // onClick={handleShow}
-                            className="btn m-2 btn-primary"
-                          >
-                            Edit
-                          </button> */}
                     </td>
                   </tr>
                 );
               })}
             </tbody>
+            <EditModal
+              id={edit.id}
+              edit={edit}
+              setEdit={setEdit}
+              editshow={editshow}
+              handleClose={handleClose}
+              handleShow={handleShow}
+            />
           </table>
         </div>
       </div>
     </div>
   );
 }
+function EditModal(props) {
+  const { handleClose, handleShow, editshow, edit, setEdit, id } = props;
+  const dispatch = useDispatch();
+  const editken = (e) => {
+    e.preventDefault();
+    // console.log(edit.id, "editt");
+    console.log(id, "<<<<< id");
+    dispatch(
+      editAssignmentScores({
+        id: id,
+        score: edit.score,
+      })
+    ).then(() => {
+      handleClose();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Success Edited ..",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
+    console.log("masuk edit");
+  };
 
-// function editModal() {
-//   const [add, setAdd] = useState({
-//     description: "",
-//     CourseId: "",
-//     deadline: "",
-//     name: "",
-//     className: "",
-//   });
-//   const added = (e) => {
-//     e.preventDefault();
-//     // console.log(add);
-//     dispatch(
-//       addingAssignment({
-//         description: add.description,
-//         CourseId: add.CourseId,
-//         deadline: add.deadline,
-//         name: add.name,
-//         className: add.className,
-//       })
-//     ).then(() => {
-//       navigate("/nilaiTugas");
-//       dispatch(setShow(false));
-//     });
-//   };
+  return (
+    <>
+      <Modal show={editshow} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Assignment Score</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={editken}>
+            <div class="field">
+              <label className="label">Description</label>
+              <input
+                value={edit.score}
+                name="description"
+                onChange={(e) => {
+                  setEdit({
+                    ...edit,
+                    score: e.target.value,
+                  });
+                }}
+                class="form-control"
+                placeholder="Enter Description"
+                type="number"
+              />
+            </div>
 
-//   return (
-//     <>
-//       <Modal show={show} onHide={handleClose}>
-//         <Modal.Header closeButton>
-//           <Modal.Title>Add Assignment</Modal.Title>
-//         </Modal.Header>
-//         <Modal.Body>
-//           <form onSubmit={added}>
-//             <div class="field">
-//               <label className="label">Description</label>
-//               <input
-//                 name="description"
-//                 onChange={(e) => {
-//                   setAdd({
-//                     ...add,
-//                     description: e.target.value,
-//                   });
-//                 }}
-//                 class="form-control"
-//                 placeholder="Enter Description"
-//               />
-//             </div>
-
-//             <div className="field">
-//               <div className="div mt-2">
-//                 <Button variant="secondary" onClick={handleClose}>
-//                   Close
-//                 </Button>
-//                 <Button
-//                   type="submit"
-//                   className="m-2"
-//                   variant="primary"
-//                   // onClick={handleClose}
-//                 >
-//                   Save Changes
-//                 </Button>
-//               </div>
-//             </div>
-//           </form>
-//         </Modal.Body>
-//         {/* <Modal.Footer></Modal.Footer> */}
-//       </Modal>
-//     </>
-//   );
-// }
+            <div className="field">
+              <div className="div mt-2">
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button
+                  type="submit"
+                  className="m-2"
+                  variant="primary"
+                  // onClick={handleClose}
+                >
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Modal.Body>
+        {/* <Modal.Footer></Modal.Footer> */}
+      </Modal>
+    </>
+  );
+}

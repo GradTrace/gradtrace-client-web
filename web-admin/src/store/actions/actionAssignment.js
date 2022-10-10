@@ -22,6 +22,12 @@ export const edittAssignment = (payload) => {
     payload,
   };
 };
+export const edittAssignmentScore = (payload) => {
+  return {
+    type: "editAssignmentScore",
+    payload,
+  };
+};
 
 export const addingAssignment = ({
   name,
@@ -53,6 +59,31 @@ export const addingAssignment = ({
       })
       .then((data) => {
         dispatch(addAssignment(data));
+        dispatch(fetchAssignment());
+      });
+  };
+};
+export const editAssignmentScores = ({ score, id }) => {
+  console.log(id, "masuk dari reeduxS");
+  return (dispatch) => {
+    return fetch(`http://localhost:3000/teachers/assignmentGrades/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        access_token: localStorage.getItem("access_token"),
+      },
+      body: JSON.stringify({
+        score: score,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Something Error Fetch Attendance");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        dispatch(edittAssignmentScore(data));
         dispatch(fetchAssignment());
       });
   };
