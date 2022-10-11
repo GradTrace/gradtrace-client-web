@@ -169,7 +169,11 @@ export default function DaftarTugas() {
                     <td>{el.deadline.split("T")[0]}</td>
                     <td>{el.description}</td>
                     <td>{el.AssignmentGrades[0]?.score}</td>
-                    <td>{el.AssignmentGrades[0]?.url}</td>
+                    <td>
+                      <a href={el.AssignmentGrades[0]?.url} target="_blank">
+                        {el.AssignmentGrades[0]?.url}
+                      </a>
+                    </td>
                     <td style={{ textAlign: "center" }}>
                       <button
                         onClick={() => {
@@ -238,7 +242,7 @@ function EditModal(props) {
         <Modal.Body>
           <form onSubmit={editken}>
             <div class="field">
-              <label className="label">Description</label>
+              <label className="label">Edit Score</label>
               <input
                 value={edit.score}
                 name="description"
@@ -249,7 +253,7 @@ function EditModal(props) {
                   });
                 }}
                 class="form-control"
-                placeholder="Enter Description"
+                placeholder=""
                 type="number"
               />
             </div>

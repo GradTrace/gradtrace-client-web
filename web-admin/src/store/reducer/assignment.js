@@ -1,6 +1,6 @@
 const initialState = {
-  assignment: [],
-  assignments: [],
+  assignment: [], //! daftar tugas
+  assignments: [], //! nilai tugas
 };
 
 function assignmentReducer(state = initialState, action) {
