@@ -1,14 +1,19 @@
 const initialState = {
   assignment: [], //! daftar tugas
   assignments: [], //! nilai tugas
+  totalPage: 0,
 };
 
 function assignmentReducer(state = initialState, action) {
   switch (action.type) {
-    case "getAssignment":
+    case "getAssignment": //! daftar tugas
       return { ...state, assignment: action.payload };
-    case "getAssignments":
-      return { ...state, assignments: action.payload };
+    case "getAssignments": //! nilai tugas
+      return {
+        ...state,
+        assignments: action.payload.rows,
+        totalPage: Math.ceil(action.payload.count / 5),
+      };
     case "addAssignment":
       return { ...state };
     case "deleteAssignment":

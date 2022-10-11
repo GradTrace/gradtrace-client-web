@@ -42,11 +42,11 @@ export const getAssignmentTugasguru = (payload) => {
 };
 
 //! INI UNTUK FETCH Assignment Student ( COMPONENT NILAI TUGASS !!)
-export const fetchAssignment = (className) => {
+export const fetchAssignment = (className, page) => {
   console.log(className, "dari reducer");
   return (dispatch) => {
     return fetch(
-      `http://localhost:3000/teachers/assignment?className=${className}`,
+      `http://localhost:3000/teachers/assignment/paginate?size=5&page=${page}&className=${className}`,
       {
         headers: {
           access_token: localStorage.getItem("access_token"),
@@ -61,7 +61,7 @@ export const fetchAssignment = (className) => {
       })
       .then((data) => {
         dispatch(getAssignments(data));
-        console.log(data, "data dari reducerrr");
+        console.log(data, "data dari reducer");
       });
   };
 };
