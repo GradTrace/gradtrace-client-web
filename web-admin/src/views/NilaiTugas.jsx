@@ -87,8 +87,10 @@ export default function DaftarTugas() {
   if (name.name == "") {
     dataFilter = assignments;
   } else {
-    dataFilter = assignments.filter((el) => el.name === name.name); //! return nya harus booleadn
-  }
+    dataFilter = assignments.filter((el) =>
+      el.name.toLowerCase().includes(name.name.toLowerCase())
+    ); //! return nya harus booleadn
+  } //! pake include biar kaya ILIKE di sequelize nyari substring dalam string
   console.log(dataFilter, "<<<< data filterran");
   console.log(name.name, "<< name .name");
 
@@ -203,6 +205,35 @@ export default function DaftarTugas() {
             />
           </table>
         </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#">
+                Previous
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                1
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                2
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                3
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   );
@@ -220,7 +251,7 @@ function EditModal(props) {
         score: edit.score,
       })
     ).then(() => {
-      dispatch(fetchAssignment()); //! kenapa ini tidak jalan  ?
+      dispatch(fetchAssignment("")); //! kenapa ini tidak jalan  ?
       handleClose();
       Swal.fire({
         position: "top-end",

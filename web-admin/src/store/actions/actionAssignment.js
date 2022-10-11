@@ -43,7 +43,7 @@ export const getAssignmentTugasguru = (payload) => {
 
 //! INI UNTUK FETCH Assignment Student ( COMPONENT NILAI TUGASS !!)
 export const fetchAssignment = (className) => {
-  // console.log(id, "dari reducer");
+  console.log(className, "dari reducer");
   return (dispatch) => {
     return fetch(
       `http://localhost:3000/teachers/assignment?className=${className}`,
@@ -173,7 +173,7 @@ export const editAssignment = ({
 export const fetchAssignmentGuru = () => {
   //! COMPONENT DAFTAR TUGASSSS
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignment`, {
+    return fetch(`http://localhost:3000/teachers/assignments`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },

@@ -14,7 +14,7 @@ export default function NilaiTugas() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const assignment = useSelector((state) => {
-    return state.assignmentReducer.assignments;
+    return state.assignmentReducer.assignment;
   });
   console.log(assignment, "data assignment");
   useEffect(() => {
