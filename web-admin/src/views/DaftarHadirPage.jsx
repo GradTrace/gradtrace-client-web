@@ -12,6 +12,11 @@ export default function DaftarHadirPage() {
   const [kelas, setKelas] = useState({
     className: "",
   });
+
+  // useEffect(() => {
+  //   dispatch(fetchAttendance());
+  // }, []);
+
   useEffect(() => {
     dispatch(fetchAttendance({ id: kelas.className }));
   }, [kelas]);
@@ -36,8 +41,8 @@ export default function DaftarHadirPage() {
             class="form-select"
             aria-label="Default select example"
           >
-            <option selected disabled>
-              Choose Class Name
+            <option selected value="0">
+              All
             </option>
             <option value="9">9</option>
             <option value="8">8</option>
