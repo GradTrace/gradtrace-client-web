@@ -380,92 +380,97 @@ export default function NilaiTugas() {
   }
 
   return (
-    <div className="container mt-2">
-      <div className="row">
-        <h2> Tugas</h2>
-        <div className="col d-flex justify-content-between">
-          <button onClick={handleShow} className="btn m-2 btn-primary">
-            Add Assignment
-          </button>
-        </div>
-        <div className="col-12 table-responsive">
-          <table className="table table-striped align-middle bg-white ">
-            <thead className="thead-dark bg-white">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Kelas</th>
-                <th scope="col">Deadline</th>
-                <th scope="col">Description</th>
-                <th style={{ textAlign: "center" }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignment.map((el, i) => {
-                return (
-                  <tr style={{ textAlign: "left" }} key={el.id}>
-                    <td>{i + 1}</td>
-                    <td>{el.name}</td>
-                    <td>{el.className}</td>
-                    <td>{el.deadline.split("T")[0]}</td>
-                    <td>{el.description}</td>
-                    <td style={{ textAlign: "center" }}>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          dispatch(deletedAssignment({ id: el.id }))
-                            .then(() => {
-                              dispatch(fetchAssignmentGuru());
-                            })
-                            .then(() => {
-                              Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: "Success Deleted ..",
-                                showConfirmButton: false,
-                                timer: 1500,
-                              });
-                            });
-                        }}
-                        className="m-2 btn btn-primary"
-                      >
-                        Delete
-                      </button>
+    <div class="card mt-2 shadow">
+      <div className="container mt-2">
+        <div className="row">
+          <h2> Tugas</h2>
+          <div className="col d-flex   justify-content-between">
+            <button onClick={handleShow} className="btn m-2 btn-primary">
+              Add Assignment
+            </button>
+          </div>
+          <div className="col-12 table-responsive">
+            <table className="table  table-striped align-middle bg-white ">
+              <thead className="table-light rounded bg-white">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Kelas</th>
+                  <th scope="col">Deadline</th>
+                  <th scope="col">Description</th>
+                  <th style={{ textAlign: "center" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {assignment.map((el, i) => {
+                  return (
+                    <tr style={{ textAlign: "left" }} key={el.id}>
+                      <td>{i + 1}</td>
 
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          seteditShow(true);
-                          setIdi({
-                            ...idi,
-                            id: el.id,
-                          });
-                        }}
-                        className="btn btn-primary"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-            <AddModal
-              add={add}
-              setAdd={setAdd}
-              show={show}
-              handleCloseAdd={handleCloseAdd}
-            />
-            <EditModal
-              id={idi.id}
-              editSatu={editSatu}
-              editShow={editshow}
-              handleClose={handleClose}
-              setEditSatu={setEditSatu}
-            />
-          </table>
+                      <td>{el.name}</td>
+
+                      <td>{el.className}</td>
+                      <td>{el.deadline.split("T")[0]}</td>
+                      <td>{el.description}</td>
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            dispatch(deletedAssignment({ id: el.id }))
+                              .then(() => {
+                                dispatch(fetchAssignmentGuru());
+                              })
+                              .then(() => {
+                                Swal.fire({
+                                  position: "top-end",
+                                  icon: "success",
+                                  title: "Success Deleted ..",
+                                  showConfirmButton: false,
+                                  timer: 1500,
+                                });
+                              });
+                          }}
+                          className="m-2 btn btn-primary"
+                        >
+                          Delete
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            seteditShow(true);
+                            setIdi({
+                              ...idi,
+                              id: el.id,
+                            });
+                          }}
+                          className="btn btn-primary"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <AddModal
+                add={add}
+                setAdd={setAdd}
+                show={show}
+                handleCloseAdd={handleCloseAdd}
+              />
+              <EditModal
+                id={idi.id}
+                editSatu={editSatu}
+                editShow={editshow}
+                handleClose={handleClose}
+                setEditSatu={setEditSatu}
+              />
+            </table>
+          </div>
         </div>
       </div>
+      <div class="card-body"></div>
     </div>
   );
 }

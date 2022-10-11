@@ -126,8 +126,8 @@ export default function DaftarTugas() {
     setPage(page - 1);
   };
   return (
-    <div className="container mt-2">
-      <div className="row">
+    <div class="card mt-2 shadow">
+      <div class="card-body">
         <h2>Assignment Student</h2>
         <div className="container">
           <div className="row">
@@ -140,7 +140,7 @@ export default function DaftarTugas() {
                   className: e.target.value,
                 });
               }}
-              class="form-select"
+              class="form-select container"
               aria-label="Default select example"
             >
               <option selected disabled>
@@ -172,9 +172,9 @@ export default function DaftarTugas() {
             </form>
           </div>
         </div>
-        <div className="col-12 table-responsive">
+        <div className="col-12 container table-responsive">
           <table className="table table-striped align-middle bg-white ">
-            <thead className="thead-dark bg-white">
+            <thead className="table-light bg-white">
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
