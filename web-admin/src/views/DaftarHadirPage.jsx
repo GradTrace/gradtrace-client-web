@@ -4,21 +4,21 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 export default function DaftarHadirPage() {
-  const attendance = useSelector((state) => {
-    return state.teacherReducer.attendance;
+  const attendances = useSelector((state) => {
+    return state.teacherReducer.attendances;
   });
-  console.log(attendance);
+  console.log(attendances);
   const dispatch = useDispatch();
   const [kelas, setKelas] = useState({
-    className: "",
+    className: 9,
   });
 
-  // useEffect(() => {
-  //   dispatch(fetchAttendance());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchAttendance());
+  }, []);
 
   useEffect(() => {
-    dispatch(fetchAttendance({ id: kelas.className }));
+    dispatch(fetchAttendance(kelas.className));
   }, [kelas]);
 
   console.log(kelas.className, "<<<");
@@ -41,10 +41,9 @@ export default function DaftarHadirPage() {
             class="form-select"
             aria-label="Default select example"
           >
-            <option selected value="0">
-              All
+            <option selected value="9">
+              9
             </option>
-            <option value="9">9</option>
             <option value="8">8</option>
             <option value="7">7</option>
           </select>
@@ -64,7 +63,7 @@ export default function DaftarHadirPage() {
               </tr>
             </thead>
             <tbody>
-              {attendance.map((el, i) => {
+              {attendances.map((el, i) => {
                 return (
                   <tr style={{ textAlign: "left" }} key={el.id}>
                     <td>{i + 1}</td>

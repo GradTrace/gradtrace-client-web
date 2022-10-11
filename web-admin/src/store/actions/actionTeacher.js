@@ -1,15 +1,15 @@
-export const getAttendance = (payload) => {
+export const getAttendances = (payload) => {
   return {
-    type: "getAttendance",
+    type: "getAttendances",
     payload,
   };
 };
 
-export const fetchAttendance = ({ id }) => {
+export const fetchAttendance = (className) => {
   return (dispatch) => {
-    console.log(id, "<<< id dari dalem");
+    // console.log(id, "<<< id dari dalem");
 
-    return fetch(`http://localhost:3000/teachers/attendances/${id}`, {
+    return fetch(`http://localhost:3000/teachers/attendances/${className}`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },
@@ -20,6 +20,6 @@ export const fetchAttendance = ({ id }) => {
         }
         return response.json();
       })
-      .then((data) => dispatch(getAttendance(data)));
+      .then((data) => dispatch(getAttendances(data)));
   };
 };

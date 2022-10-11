@@ -1,11 +1,11 @@
 const initialState = {
-  attendance: [],
+  attendances: [],
 };
 
 function teacherReducer(state = initialState, action) {
   switch (action.type) {
-    case "getAttendance":
-      return { ...state, attendance: action.payload };
+    case "getAttendances":
+      return { ...state, attendances: action.payload };
 
     default:
       return state;

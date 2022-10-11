@@ -1,470 +1,201 @@
-import { fetchAssignmentGuru } from "../store/actions/actionAssignment";
+import { fetchAssignment } from "../store/actions/actionAssignment";
 import { useEffect, useSelect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { addingAssignment } from "../store/actions/actionAssignment";
-import { deletedAssignment } from "../store/actions/actionAssignment";
-import { editAssignment } from "../store/actions/actionAssignment";
-import Swal from "sweetalert2";
 
-export default function NilaiTugas() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+import { editAssignmentScores } from "../store/actions/actionAssignment";
+
+import Swal from "sweetalert2";
+export default function DaftarTugas() {
   const assignments = useSelector((state) => {
     return state.assignmentReducer.assignments;
   });
-  // console.log(assignment, "data");
+  console.log(assignments, "data dari networkkk");
+
   useEffect(() => {
-    dispatch(fetchAssignmentGuru());
+    dispatch(fetchAssignment());
   }, []);
-  const [add, setAdd] = useState({
-    description: "",
-    CourseId: "",
-    deadline: "",
-    name: "",
-    className: "",
-  });
-  const [editSatu, setEditSatu] = useState({
-    description: "",
-    CourseId: "",
-    deadline: "",
-    name: "",
-    className: "",
-  });
-  const params = useParams();
-  // console.log(params.id, "parramss");
   const [idi, setIdi] = useState({
     id: 0,
   });
 
-  // console.log(editSatu, "ini data");
-  // console.log(idi.id, "idddd");
+  const [edit, setEdit] = useState({
+    score: "",
+    id: "",
+  });
+
+  console.log(idi, "ini id");
   useEffect(() => {
-    if (idi.id !== 0) {
-      fetch(`http://localhost:3000/teachers/assignment/${idi.id}`, {
-        headers: {
-          access_token: localStorage.getItem("access_token"),
-        },
+    fetch(`http://localhost:3000/teachers/assignmentGrades/${idi.id}`, {
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then((response) => {
+        console.log(response, "<<< response");
+        if (!response.ok) {
+          throw new Error("Something Error Fetch assignmentn");
+        }
+        return response.json();
       })
-        .then((response) => {
-          console.log(response, "<<< response");
-          if (!response.ok) {
-            throw new Error("Something Error Fetch assignmentn");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data, "ini data satuan");
-
-          // console.log(data.deadline, "<<< deadline");
-          const rubahDeadline = data.deadline.split("T")[0];
-          console.log(rubahDeadline, "<<<<< rubah deadline");
-          setEditSatu({
-            description: data.description,
-            CourseId: data.CourseId,
-            deadline: rubahDeadline,
-            name: data.name,
-            className: data.className,
-          });
+      .then((data) => {
+        setEdit({
+          score: data.score,
+          id: data.id,
         });
-    }
-  }, [idi]);
-  // console.log(editSatu, "<<<<<");
-
-  function Example() {
-    const [add, setAdd] = useState({
-      description: "",
-      CourseId: "",
-      deadline: "",
-      name: "",
-      className: "",
-    });
-    const added = (e) => {
-      e.preventDefault();
-      // console.log(add);
-      dispatch(
-        addingAssignment({
-          description: add.description,
-          CourseId: add.CourseId,
-          deadline: add.deadline,
-          name: add.name,
-          className: add.className,
-        })
-      ).then(() => {
-        navigate("/nilaiTugas");
-        dispatch(setShow(false));
+        console.log(data, "ini data satuan");
       });
-    };
+  }, [idi]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  console.log(assignments, "data");
 
-    return (
-      <>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Assignment</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <form onSubmit={added}>
-              <div class="field">
-                <label className="label">Description</label>
-                <input
-                  name="description"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      description: e.target.value,
-                    });
-                  }}
-                  class="form-control"
-                  placeholder="Enter Description"
-                />
-              </div>
-              {/* <div class="field">
-                <label className="label">Courses</label>
-                <select
-                  name="CourseId"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      CourseId: e.target.value,
-                    });
-                  }}
-                  class="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected disabled>
-                    Choose Courses
-                  </option>
-                  <option value="1">Mathematics</option>
-                  <option value="2">Biology</option>
-                  <option value="3">English</option>
-                </select>
-              </div> */}
-              <div class="field">
-                <label className="label">Deadline</label>
-                <input
-                  name="deadline"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      deadline: e.target.value,
-                    });
-                  }}
-                  type="date"
-                  class="form-control"
-                  placeholder="Deadline"
-                ></input>
-              </div>
-              <div class="field">
-                <label className="label">Name</label>
-                <input
-                  name="name"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      name: e.target.value,
-                    });
-                  }}
-                  class="form-control"
-                  placeholder="name"
-                ></input>
-              </div>
-              <div class="field">
-                <label className="label">Class Name</label>
-                <select
-                  name="className"
-                  onChange={(e) => {
-                    setAdd({
-                      ...add,
-                      className: e.target.value,
-                    });
-                  }}
-                  class="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected disabled>
-                    Choose Class
-                  </option>
-                  <option value="9">9</option>
-                  <option value="8">8</option>
-                  <option value="7">7</option>
-                </select>
-              </div>
-
-              <div className="field">
-                <div className="div mt-2">
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="m-2"
-                    variant="primary"
-                    // onClick={handleClose}
-                  >
-                    Save Changes
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </Modal.Body>
-          {/* <Modal.Footer></Modal.Footer> */}
-        </Modal>
-      </>
-    );
-  }
-  // function EditModal() {
-  //   const [edit, setEdit] = useState({
-  //     description: "",
-  //     CourseId: "",
-  //     deadline: "",
-  //     name: "",
-  //     className: "",
-  //   });
-  //   const editKen = (e) => {
-  //     e.preventDefault();
-
-  //     dispatch(
-  //       editAssignment({
-  //         description: edit.description,
-  //         CourseId: edit.CourseId,
-  //         deadline: edit.deadline,
-  //         name: edit.name,
-  //         className: edit.className,
-  //       })
-  //     ).then(() => {
-  //       navigate("/nilaiTugas");
-  //       dispatch(setShow(false));
-  //     });
-  //   };
-
-  //   return (
-  //     <>
-  //       <Modal show={editshow} onHide={handleClose}>
-  //         <Modal.Header closeButton>
-  //           <Modal.Title>Edit Assignment</Modal.Title>
-  //         </Modal.Header>
-  //         <Modal.Body>
-  //           <form onSubmit={editKen}>
-  //             <div class="field">
-  //               <label className="label">Description</label>
-  //               <input
-  //                 value={editSatu.description}
-  //                 name="description"
-  //                 onChange={(e) => {
-  //                   setEdit({
-  //                     ...edit,
-  //                     description: e.target.value,
-  //                   });
-  //                 }}
-  //                 class="form-control"
-  //                 placeholder="Enter Description"
-  //               />
-  //             </div>
-  //             {/* <div class="field">
-  //               <label className="label">Courses</label>
-  //               <select
-  //                 name="CourseId"
-  //                 onChange={(e) => {
-  //                   setEdit({
-  //                     ...edit,
-  //                     CourseId: e.target.value,
-  //                   });
-  //                 }}
-  //                 class="form-select"
-  //                 aria-label="Default select example"
-  //               >
-  //                 <option selected disabled>
-  //                   Choose Courses
-  //                 </option>
-  //                 <option value="1">Mathematics</option>
-  //                 <option value="2">Biology</option>
-  //                 <option value="3">English</option>
-  //               </select>
-  //             </div> */}
-  //             <div class="field">
-  //               <label className="label">Deadline</label>
-  //               <input
-  //                 value={editSatu.deadline}
-  //                 name="deadline"
-  //                 onChange={(e) => {
-  //                   setEdit({
-  //                     ...edit,
-  //                     deadline: e.target.value,
-  //                   });
-  //                 }}
-  //                 type="date"
-  //                 class="form-control"
-  //                 placeholder="Deadline"
-  //               ></input>
-  //             </div>
-  //             <div class="field">
-  //               <label className="label">Name</label>
-  //               <input
-  //                 value={editSatu.name}
-  //                 name="name"
-  //                 onChange={(e) => {
-  //                   setEdit({
-  //                     ...edit,
-  //                     name: e.target.value,
-  //                   });
-  //                 }}
-  //                 class="form-control"
-  //                 placeholder="name"
-  //               ></input>
-  //             </div>
-  //             <div class="field">
-  //               <label className="label">Class Name</label>
-  //               <select
-  //                 value={editSatu.className}
-  //                 name="className"
-  //                 onChange={(e) => {
-  //                   setEdit({
-  //                     ...edit,
-  //                     className: e.target.value,
-  //                   });
-  //                 }}
-  //                 class="form-select"
-  //                 aria-label="Default select example"
-  //               >
-  //                 <option selected disabled>
-  //                   Choose Class
-  //                 </option>
-  //                 <option value="9">9</option>
-  //                 <option value="8">8</option>
-  //                 <option value="7">7</option>
-  //               </select>
-  //             </div>
-
-  //             <div className="field">
-  //               <div className="div mt-2">
-  //                 <Button variant="secondary" onClick={handleClose}>
-  //                   Close
-  //                 </Button>
-  //                 <Button
-  //                   type="submit"
-  //                   className="m-2"
-  //                   variant="primary"
-  //                   // onClick={handleClose}
-  //                 >
-  //                   Save Changes
-  //                 </Button>
-  //               </div>
-  //             </div>
-  //           </form>
-  //         </Modal.Body>
-  //         {/* <Modal.Footer></Modal.Footer> */}
-  //       </Modal>
-  //     </>
-  //   );
-  // }
-
-  const [show, setShow] = useState(false);
   const [editshow, seteditShow] = useState(false);
+
   const handleClose = () => {
     seteditShow(false);
   };
-  const handleCloseAdd = () => {
-    setShow(false);
-  };
 
   const handleShow = () => {
-    setShow(true);
+    seteditShow(true);
+    console.log("handle show");
   };
 
-  if (!assignments) {
-    return <h2>Loading ..</h2>;
-  }
+  const [kelas, setKelas] = useState({
+    className: "",
+  });
+  console.log(kelas, "<< data kelas");
+  let className = kelas.className;
+  useEffect(() => {
+    dispatch(fetchAssignment(className));
+  }, [kelas]);
+  console.log(kelas);
 
+  const inputHandler = (e) => {
+    setName({
+      name: e.target.value,
+    });
+  };
+  const [name, setName] = useState({
+    name: "",
+  });
+  console.log(assignments, "<< data rredux");
+  let dataFilter;
+  if (name.name == "") {
+    dataFilter = assignments;
+  } else {
+    dataFilter = assignments.filter((el) => el.name === name.name); //! return nya harus booleadn
+  }
+  console.log(dataFilter, "<<<< data filterran");
+  console.log(name.name, "<< name .name");
+
+  const filtering = (e) => {
+    e.preventDefault();
+    console.log(name);
+  };
   return (
     <div className="container mt-2">
       <div className="row">
-        <h2> Tugas</h2>
-
+        <h2>Assignment Student</h2>
+        <div className="container">
+          <div className="row">
+            <label htmlFor=""> filter by Class</label>
+            <select
+              name="className"
+              onChange={(e) => {
+                setKelas({
+                  ...kelas,
+                  className: e.target.value,
+                });
+              }}
+              class="form-select"
+              aria-label="Default select example"
+            >
+              <option selected disabled>
+                Open this select menu
+              </option>
+              <option value="9">9</option>
+              <option value="8">8</option>
+              <option value="7">7</option>
+            </select>
+            <form onSubmit={filtering} action="">
+              <div class="input-group mt-3 d-flex justify-content-center">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="submit"
+                  id="button-addon1"
+                >
+                  Search
+                </button>
+                <input
+                  name="search"
+                  onChange={inputHandler}
+                  type="text"
+                  class="form-control"
+                  placeholder="search by assignment"
+                  aria-label="Example text with button addon"
+                  aria-describedby="button-addon1"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
         <div className="col-12 table-responsive">
           <table className="table table-striped align-middle bg-white ">
             <thead className="thead-dark bg-white">
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Kelas</th>
+                <th scope="col">Assignment</th>
+                <th scope="col">Class</th>
                 <th scope="col">Deadline</th>
                 <th scope="col">Description</th>
+                <th scope="col">Score</th>
+                <th scope="col">Link Assignment</th>
                 <th style={{ textAlign: "center" }}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {assignments.map((el, i) => {
+              {dataFilter.map((el, i) => {
                 return (
                   <tr style={{ textAlign: "left" }} key={el.id}>
                     <td>{i + 1}</td>
+                    <td>{el.AssignmentGrades[0]?.Student.fullName}</td>
                     <td>{el.name}</td>
                     <td>{el.className}</td>
                     <td>{el.deadline.split("T")[0]}</td>
                     <td>{el.description}</td>
+                    <td>{el.AssignmentGrades[0]?.score}</td>
+                    <td>{el.AssignmentGrades[0]?.url}</td>
                     <td style={{ textAlign: "center" }}>
                       <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          dispatch(deletedAssignment({ id: el.id }))
-                            .then(() => {
-                              navigate("/nilaiTugas");
-                              dispatch(fetchAssignmentGuru());
-                            })
-                            .then(() => {
-                              Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: "Success Deleted ..",
-                                showConfirmButton: false,
-                                timer: 1500,
-                              });
-                            });
-                        }}
-                        className="m-2 btn btn-primary"
-                      >
-                        Delete
-                      </button>
-
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
+                        onClick={() => {
+                          console.log("masuk");
                           seteditShow(true);
                           setIdi({
                             ...idi,
-                            id: el.id,
+                            id: el.AssignmentGrades[0].id,
                           });
                         }}
                         className="btn btn-primary"
                       >
                         Edit
                       </button>
-
-                      <button
-                        onClick={handleShow}
-                        className="btn m-2 btn-primary"
-                      >
-                        Add Assignment
-                      </button>
                     </td>
                   </tr>
                 );
               })}
             </tbody>
-            <AddModal
-              add={add}
-              setAdd={setAdd}
-              show={show}
-              handleCloseAdd={handleCloseAdd}
-            />
             <EditModal
-              id={idi.id}
-              editSatu={editSatu}
-              editShow={editshow}
+              id={edit.id}
+              edit={edit}
+              setEdit={setEdit}
+              editshow={editshow}
               handleClose={handleClose}
-              setEditSatu={setEditSatu}
+              handleShow={handleShow}
             />
           </table>
         </div>
@@ -473,26 +204,20 @@ export default function NilaiTugas() {
   );
 }
 function EditModal(props) {
-  const { id, editSatu, editShow, handleClose, setEditSatu } = props;
+  const { handleClose, handleShow, editshow, edit, setEdit, id } = props;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const editKen = (e) => {
+  const editken = (e) => {
     e.preventDefault();
-    console.log(editSatu, "<<< data edit");
+    // console.log(edit.id, "editt");
+    console.log(id, "<<<<< id");
     dispatch(
-      editAssignment({
+      editAssignmentScores({
         id: id,
-        description: editSatu.description,
-        CourseId: editSatu.CourseId,
-        deadline: editSatu.deadline,
-        name: editSatu.name,
-        className: editSatu.className,
+        score: edit.score,
       })
     ).then(() => {
-      // navigate("/nilaiTugas");
+      dispatch(fetchAssignment()); //! kenapa ini tidak jalan  ?
       handleClose();
-
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -501,205 +226,37 @@ function EditModal(props) {
         timer: 1500,
       });
     });
+    console.log("masuk edit");
   };
 
   return (
     <>
-      <Modal show={editShow} onHide={handleClose}>
+      <Modal show={editshow} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Assignment</Modal.Title>
+          <Modal.Title>Edit Assignment Score</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={editKen}>
-            <div className="field">
+          <form onSubmit={editken}>
+            <div class="field">
               <label className="label">Description</label>
               <input
+                value={edit.score}
                 name="description"
-                value={editSatu.description}
                 onChange={(e) => {
-                  setEditSatu({
-                    ...editSatu,
-                    description: e.target.value,
+                  setEdit({
+                    ...edit,
+                    score: e.target.value,
                   });
                 }}
-                className="form-control"
+                class="form-control"
                 placeholder="Enter Description"
+                type="number"
               />
-            </div>
-
-            <div className="field">
-              <label className="label">Deadline</label>
-              <input
-                value={editSatu.deadline}
-                name="deadline"
-                onChange={(e) => {
-                  setEditSatu({
-                    ...editSatu,
-                    deadline: e.target.value,
-                  });
-                }}
-                type="date"
-                className="form-control"
-                placeholder="Deadline"
-              ></input>
-            </div>
-            <div className="field">
-              <label className="label">Name</label>
-              <input
-                value={editSatu.name}
-                name="name"
-                onChange={(e) => {
-                  setEditSatu({
-                    ...editSatu,
-                    name: e.target.value,
-                  });
-                }}
-                className="form-control"
-                placeholder="name"
-              ></input>
-            </div>
-            <div className="field">
-              <label className="label">Class Name</label>
-              <select
-                value={editSatu.className}
-                name="className"
-                onChange={(e) => {
-                  setEditSatu({
-                    ...editSatu,
-                    className: e.target.value,
-                  });
-                }}
-                className="form-select"
-                aria-label="Default select example"
-              >
-                <option selected disabled>
-                  Choose Class
-                </option>
-                <option value="9">9</option>
-                <option value="8">8</option>
-                <option value="7">7</option>
-              </select>
             </div>
 
             <div className="field">
               <div className="div mt-2">
                 <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button type="submit" className="m-2" variant="primary">
-                  Save Changes
-                </Button>
-              </div>
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
-    </>
-  );
-}
-function AddModal(props) {
-  const dispatch = useDispatch();
-  const { show, handleCloseAdd, add, setAdd } = props;
-
-  const added = (e) => {
-    e.preventDefault();
-    dispatch(
-      addingAssignment({
-        description: add.description,
-        CourseId: add.CourseId,
-        deadline: add.deadline,
-        name: add.name,
-        className: add.className,
-      })
-    ).then(() => {
-      handleCloseAdd();
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Success Added ..",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    });
-  };
-
-  return (
-    <>
-      <Modal show={show} onHide={handleCloseAdd}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Assignment</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form onSubmit={added}>
-            <div className="field">
-              <label className="label">Description</label>
-              <input
-                name="description"
-                onChange={(e) => {
-                  setAdd({
-                    ...add,
-                    description: e.target.value,
-                  });
-                }}
-                className="form-control"
-                placeholder="Enter Description"
-              />
-            </div>
-
-            <div className="field">
-              <label className="label">Deadline</label>
-              <input
-                name="deadline"
-                onChange={(e) => {
-                  setAdd({
-                    ...add,
-                    deadline: e.target.value,
-                  });
-                }}
-                type="date"
-                className="form-control"
-                placeholder="Deadline"
-              ></input>
-            </div>
-            <div className="field">
-              <label className="label">Name</label>
-              <input
-                name="name"
-                onChange={(e) => {
-                  setAdd({
-                    ...add,
-                    name: e.target.value,
-                  });
-                }}
-                className="form-control"
-                placeholder="name"
-              ></input>
-            </div>
-            <div className="field">
-              <label className="label">Class Name</label>
-              <select
-                name="className"
-                onChange={(e) => {
-                  setAdd({
-                    ...add,
-                    className: e.target.value,
-                  });
-                }}
-                className="form-select"
-                aria-label="Default select example"
-              >
-                <option selected disabled>
-                  Choose Class
-                </option>
-                <option value="9">9</option>
-                <option value="8">8</option>
-                <option value="7">7</option>
-              </select>
-            </div>
-
-            <div className="field">
-              <div className="div mt-2">
-                <Button variant="secondary" onClick={handleCloseAdd}>
                   Close
                 </Button>
                 <Button
@@ -714,6 +271,7 @@ function AddModal(props) {
             </div>
           </form>
         </Modal.Body>
+        {/* <Modal.Footer></Modal.Footer> */}
       </Modal>
     </>
   );
