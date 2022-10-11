@@ -13,10 +13,14 @@ export default function DaftarTugas() {
   const assignments = useSelector((state) => {
     return state.assignmentReducer.assignments;
   });
+  const totalPage = useSelector((state) => {
+    return state.assignmentReducer.totalPage;
+  });
+  console.log(totalPage, "dua bukan ?");
   console.log(assignments, "data dari networkkk");
-
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    dispatch(fetchAssignment());
+    dispatch(fetchAssignment("", page));
   }, []);
   const [idi, setIdi] = useState({
     id: 0,
@@ -70,7 +74,7 @@ export default function DaftarTugas() {
   console.log(kelas, "<< data kelas");
   let className = kelas.className;
   useEffect(() => {
-    dispatch(fetchAssignment(className));
+    dispatch(fetchAssignment(className, page));
   }, [kelas]);
   console.log(kelas);
 
@@ -87,14 +91,39 @@ export default function DaftarTugas() {
   if (name.name == "") {
     dataFilter = assignments;
   } else {
-    dataFilter = assignments.filter((el) => el.name === name.name); //! return nya harus booleadn
-  }
+    dataFilter = assignments.filter((el) =>
+      el.name.toLowerCase().includes(name.name.toLowerCase())
+    ); //! return nya harus booleadn
+  } //! pake include biar kaya ILIKE di sequelize nyari substring dalam string
   console.log(dataFilter, "<<<< data filterran");
   console.log(name.name, "<< name .name");
 
   const filtering = (e) => {
     e.preventDefault();
     console.log(name);
+  };
+
+  useEffect(() => {
+    dispatch(fetchAssignment("", page));
+  }, [page]);
+  const next = (e) => {
+    console.log(page, "<<< page");
+    e.preventDefault();
+
+    if (page + 1 > totalPage) {
+      return;
+    }
+    setPage(page + 1);
+    // dispatch(fetchAssignment(className, page));
+  };
+  const previous = (e) => {
+    console.log(page, "<<< page");
+    e.preventDefault();
+    if (page == 1) {
+      return;
+    }
+    // dispatch(fetchAssignment(className, page - 1));
+    setPage(page - 1);
   };
   return (
     <div className="container mt-2">
@@ -162,14 +191,18 @@ export default function DaftarTugas() {
               {dataFilter.map((el, i) => {
                 return (
                   <tr style={{ textAlign: "left" }} key={el.id}>
-                    <td>{i + 1}</td>
+                    <td>{i + 1 + (page - 1) * 5}</td>
                     <td>{el.AssignmentGrades[0]?.Student.fullName}</td>
                     <td>{el.name}</td>
                     <td>{el.className}</td>
                     <td>{el.deadline.split("T")[0]}</td>
                     <td>{el.description}</td>
                     <td>{el.AssignmentGrades[0]?.score}</td>
-                    <td>{el.AssignmentGrades[0]?.url}</td>
+                    <td>
+                      <a href={el.AssignmentGrades[0]?.url} target="_blank">
+                        {el.AssignmentGrades[0]?.url}
+                      </a>
+                    </td>
                     <td style={{ textAlign: "center" }}>
                       <button
                         onClick={() => {
@@ -196,15 +229,57 @@ export default function DaftarTugas() {
               editshow={editshow}
               handleClose={handleClose}
               handleShow={handleShow}
+              page={page}
             />
           </table>
+        </div>
+        <div className="container d-flex justify-content-center">
+          <div className="row">
+            <div className="col">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a onClick={previous} class="page-link" href="#">
+                      Previous
+                    </a>
+                  </li>
+                  {(() => {
+                    let td = [];
+                    for (let i = 1; i <= totalPage; i++) {
+                      td.push(
+                        <li class="page-item">
+                          <a
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setPage(i);
+                            }}
+                            class="page-link"
+                            href="#"
+                          >
+                            {i}
+                          </a>
+                        </li>
+                      );
+                    }
+                    return td;
+                  })()}
+
+                  <li class="page-item">
+                    <a onClick={next} class="page-link" href="#">
+                      Next
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 function EditModal(props) {
-  const { handleClose, handleShow, editshow, edit, setEdit, id } = props;
+  const { handleClose, handleShow, editshow, edit, setEdit, id, page } = props;
   const dispatch = useDispatch();
   const editken = (e) => {
     e.preventDefault();
@@ -216,7 +291,7 @@ function EditModal(props) {
         score: edit.score,
       })
     ).then(() => {
-      dispatch(fetchAssignment()); //! kenapa ini tidak jalan  ?
+      dispatch(fetchAssignment("", page));
       handleClose();
       Swal.fire({
         position: "top-end",
@@ -238,7 +313,7 @@ function EditModal(props) {
         <Modal.Body>
           <form onSubmit={editken}>
             <div class="field">
-              <label className="label">Description</label>
+              <label className="label">Edit Score</label>
               <input
                 value={edit.score}
                 name="description"
@@ -249,7 +324,7 @@ function EditModal(props) {
                   });
                 }}
                 class="form-control"
-                placeholder="Enter Description"
+                placeholder=""
                 type="number"
               />
             </div>

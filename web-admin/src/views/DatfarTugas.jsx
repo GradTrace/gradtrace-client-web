@@ -13,10 +13,10 @@ import Swal from "sweetalert2";
 export default function NilaiTugas() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const assignments = useSelector((state) => {
-    return state.assignmentReducer.assignments;
+  const assignment = useSelector((state) => {
+    return state.assignmentReducer.assignment;
   });
-  // console.log(assignment, "data");
+  console.log(assignment, "data assignment");
   useEffect(() => {
     dispatch(fetchAssignmentGuru());
   }, []);
@@ -42,6 +42,7 @@ export default function NilaiTugas() {
 
   // console.log(editSatu, "ini data");
   // console.log(idi.id, "idddd");
+  //!BUAT POPULATE DATA
   useEffect(() => {
     if (idi.id !== 0) {
       fetch(`http://localhost:3000/teachers/assignment/${idi.id}`, {
@@ -374,7 +375,7 @@ export default function NilaiTugas() {
     setShow(true);
   };
 
-  if (!assignments) {
+  if (!assignment) {
     return <h2>Loading ..</h2>;
   }
 
@@ -400,7 +401,7 @@ export default function NilaiTugas() {
               </tr>
             </thead>
             <tbody>
-              {assignments.map((el, i) => {
+              {assignment.map((el, i) => {
                 return (
                   <tr style={{ textAlign: "left" }} key={el.id}>
                     <td>{i + 1}</td>
@@ -414,7 +415,6 @@ export default function NilaiTugas() {
                           e.preventDefault();
                           dispatch(deletedAssignment({ id: el.id }))
                             .then(() => {
-                              navigate("/nilaiTugas");
                               dispatch(fetchAssignmentGuru());
                             })
                             .then(() => {
@@ -489,6 +489,7 @@ function EditModal(props) {
     ).then(() => {
       // navigate("/nilaiTugas");
       handleClose();
+      dispatch(fetchAssignmentGuru());
 
       Swal.fire({
         position: "top-end",
@@ -610,6 +611,7 @@ function AddModal(props) {
       })
     ).then(() => {
       handleCloseAdd();
+      dispatch(fetchAssignmentGuru());
       Swal.fire({
         position: "top-end",
         icon: "success",

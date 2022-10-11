@@ -1,9 +1,9 @@
-export const getAssignment = (payload) => {
-  return {
-    type: "getAssignment",
-    payload,
-  };
-};
+// export const getAssignment = (payload) => {
+//   return {
+//     type: "getAssignment",
+//     payload,
+//   };
+// };
 export const getAssignments = (payload) => {
   return {
     type: "getAssignments",
@@ -36,8 +36,33 @@ export const edittAssignmentScore = (payload) => {
 };
 export const getAssignmentTugasguru = (payload) => {
   return {
-    type: "getAssignments",
+    type: "getAssignment",
     payload,
+  };
+};
+
+//! INI UNTUK FETCH Assignment Student ( COMPONENT NILAI TUGASS !!)
+export const fetchAssignment = (className, page) => {
+  console.log(className, "dari reducer");
+  return (dispatch) => {
+    return fetch(
+      `http://localhost:3000/teachers/assignment/paginate?size=5&page=${page}&className=${className}`,
+      {
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Something Error Fetch Attendance");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        dispatch(getAssignments(data));
+        console.log(data, "data dari reducer");
+      });
   };
 };
 
@@ -71,7 +96,8 @@ export const addingAssignment = ({
       })
       .then((data) => {
         dispatch(addAssignment(data));
-        dispatch(fetchAssignment());
+        // dispatch(fetchAssignment());
+        dispatch(fetchAssignmentGuru());
       });
   };
 };
@@ -97,8 +123,10 @@ export const editAssignmentScores = ({ score, id }) => {
         return response.json();
       })
       .then((data) => {
-        dispatch(fetchAssignment());
         dispatch(edittAssignmentScore(data));
+      })
+      .then(() => {
+        dispatch(fetchAssignment());
       });
   };
 };
@@ -134,38 +162,18 @@ export const editAssignment = ({
       })
       .then((data) => {
         dispatch(edittAssignment(data));
-        dispatch(fetchAssignment());
-      });
-  };
-};
-//! INI UNTUK FETCH Assignment Student ( COMPONENT NILAI TUGASS !!)
-export const fetchAssignment = (className) => {
-  // console.log(id, "dari reducer");
-  return (dispatch) => {
-    return fetch(
-      `http://localhost:3000/teachers/assignment?className=${className}`,
-      {
-        headers: {
-          access_token: localStorage.getItem("access_token"),
-        },
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Something Error Fetch Attendance");
-        }
-        return response.json();
+        dispatch(fetchAssignmentGuru());
       })
-      .then((data) => {
-        dispatch(getAssignments(data));
-        console.log(data, "data dari reducerrr");
+      .catch((err) => {
+        console.log(err);
       });
   };
 };
+
 export const fetchAssignmentGuru = () => {
   //! COMPONENT DAFTAR TUGASSSS
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignment`, {
+    return fetch(`http://localhost:3000/teachers/assignments`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },
@@ -176,7 +184,10 @@ export const fetchAssignmentGuru = () => {
         }
         return response.json();
       })
-      .then((data) => dispatch(getAssignmentTugasguru(data)));
+      .then((data) => {
+        dispatch(getAssignmentTugasguru(data));
+        console.log(data, "<<< data guru");
+      });
   };
 };
 export const deletedAssignment = ({ id }) => {
@@ -195,7 +206,7 @@ export const deletedAssignment = ({ id }) => {
       })
       .then((data) => {
         dispatch(deleteAssignment(data));
-        dispatch(getAssignment());
+        dispatch(getAssignmentTugasguru());
       });
   };
 };
