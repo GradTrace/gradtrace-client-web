@@ -4,6 +4,12 @@ export const getAssignment = (payload) => {
     payload,
   };
 };
+export const getAssignments = (payload) => {
+  return {
+    type: "getAssignments",
+    payload,
+  };
+};
 export const addAssignment = (payload) => {
   return {
     type: "addAssignment",
@@ -69,6 +75,8 @@ export const addingAssignment = ({
       });
   };
 };
+
+//! EDIT SCORE STUDENT NILAI TUGAS
 export const editAssignmentScores = ({ score, id }) => {
   console.log(id, "masuk dari reeduxS");
   return (dispatch) => {
@@ -89,11 +97,12 @@ export const editAssignmentScores = ({ score, id }) => {
         return response.json();
       })
       .then((data) => {
-        dispatch(edittAssignmentScore(data));
         dispatch(fetchAssignment());
+        dispatch(edittAssignmentScore(data));
       });
   };
 };
+//!DAFTAR TUGAS //!
 export const editAssignment = ({
   name,
   description,
@@ -129,23 +138,32 @@ export const editAssignment = ({
       });
   };
 };
-export const fetchAssignment = (id) => {
+//! INI UNTUK FETCH Assignment Student ( COMPONENT NILAI TUGASS !!)
+export const fetchAssignment = (className) => {
+  // console.log(id, "dari reducer");
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignment/${id}`, {
-      headers: {
-        access_token: localStorage.getItem("access_token"),
-      },
-    })
+    return fetch(
+      `http://localhost:3000/teachers/assignment?className=${className}`,
+      {
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Something Error Fetch Attendance");
         }
         return response.json();
       })
-      .then((data) => dispatch(getAssignment(data)));
+      .then((data) => {
+        dispatch(getAssignments(data));
+        console.log(data, "data dari reducerrr");
+      });
   };
 };
 export const fetchAssignmentGuru = () => {
+  //! COMPONENT DAFTAR TUGASSSS
   return (dispatch) => {
     return fetch(`http://localhost:3000/teachers/assignment`, {
       headers: {
