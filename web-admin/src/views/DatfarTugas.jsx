@@ -80,7 +80,13 @@ export default function DaftarTugas() {
   const [name, setName] = useState({
     name: "",
   });
-  let dataFilter = assignment.filter((el) => (el.name === name ? el.name : el));
+  console.log(assignment, "<< data rredux");
+  let dataFilter;
+  if (name.name == "") {
+    dataFilter = assignment;
+  } else {
+    dataFilter = assignment.filter((el) => el.name === name.name); //! return nya harus booleadn
+  }
 
   const filtering = (e) => {
     e.preventDefault();
@@ -126,7 +132,7 @@ export default function DaftarTugas() {
                   onChange={inputHandler}
                   type="text"
                   class="form-control"
-                  placeholder=""
+                  placeholder="search by assignment"
                   aria-label="Example text with button addon"
                   aria-describedby="button-addon1"
                 />

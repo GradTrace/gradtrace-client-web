@@ -8,6 +8,7 @@ export const getAttendance = (payload) => {
 export const fetchAttendance = ({ id }) => {
   return (dispatch) => {
     console.log(id, "<<< id dari dalem");
+
     return fetch(`http://localhost:3000/teachers/attendances/${id}`, {
       headers: {
         access_token: localStorage.getItem("access_token"),

@@ -131,7 +131,7 @@ export const editAssignment = ({
 };
 export const fetchAssignment = (id) => {
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignment?className=${id}`, {
+    return fetch(`http://localhost:3000/teachers/assignment/${id}`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },
