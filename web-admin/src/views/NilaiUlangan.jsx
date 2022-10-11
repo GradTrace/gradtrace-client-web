@@ -1,56 +1,83 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchExamScore } from "../store/actions/actionExam";
-import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { editExam } from "../store/actions/actionExam";
 export default function NilaiUlangan() {
-  function MyVerticallyCenteredModal(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-center">
-            Edit Student Data Here
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form>
-            <div class="field">
-              <label className="label">Nilai UTS</label>
-              <input class="form-control" placeholder="Nilai UTS"></input>
-            </div>
-            <div class="field">
-              <label className="label">Nilai UAS</label>
-              <input class="form-control" placeholder="Nilai UAS"></input>
-            </div>
-            <div className="field">
-              <button type="submit" class="button is-success">
-                Submit
-              </button>
-              <button type="submit" class="button">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
-    );
-  }
-  const [modalShow, setModalShow] = React.useState(false);
-  // end of modal
   const dispatch = useDispatch();
   const examScore = useSelector((state) => {
-    return state;
+    return state.examReducer.examScore;
   });
-  console.log(examScore);
+
   useEffect(() => {
     dispatch(fetchExamScore());
   }, []);
+  // start populate
+  const [populate, setPopulate] = useState({});
+  const [idi, setIdi] = useState({
+    id: 0,
+  });
+
+  const [edit, setEdit] = useState({
+    UAS: { score: "", id: 0 },
+    UTS: { score: "", id: 0 },
+    UL1: { score: "", id: 0 },
+    UL2: { score: "", id: 0 },
+  });
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/teachers/exams/score/${idi.id}`, {
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Something Error Fetch assignmentn");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        let newEdit = {};
+        data[0].ExamGrades.forEach((e) => {
+          console.log(e.score);
+          console.log(e.Exam.name);
+          console.log(e.id, ",");
+
+          if (e.Exam.name === "UAS") {
+            newEdit.UAS = {
+              score: e.score,
+              id: e.id,
+            };
+          } else if (e.Exam.name === "UTS") {
+            newEdit.UTS = {
+              score: e.score,
+              id: e.id,
+            };
+          } else if (e.Exam.name === "Ulangan 1") {
+            newEdit.UL1 = {
+              score: e.score,
+              id: e.id,
+            };
+          } else if (e.Exam.name === "Ulangan 2") {
+            newEdit.UL2 = {
+              score: e.score,
+              id: e.id,
+            };
+          }
+        });
+        setEdit(newEdit);
+      });
+  }, [idi]);
+  // start modal
+  const [modalShow, setModalShow] = React.useState(false);
+  // end of modal
+  if (!populate) {
+    return <h2>Loading...</h2>;
+  }
   if (!examScore) {
     return <h2>Loading...</h2>;
   }
@@ -70,48 +97,198 @@ export default function NilaiUlangan() {
               <th class="text-center">Mata Pelajaran</th>
               <th class="text-center">Nilai UTS</th>
               <th class="text-center">Nilai UAS</th>
+              <th class="text-center">Nilai Ulangan 1</th>
+              <th class="text-center">Nilai Ulangan 2</th>
               <th class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <img
-                  src="https://mdbootstrap.com/img/new/avatars/8.jpg"
-                  alt=""
-                  style={{ width: 100, height: 100 }}
-                  class="rounded-circle"
-                />
-              </td>
-              <td>
-                <div>
-                  <div>
-                    <p>John Doe</p>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <p>Software engineer</p>
-              </td>
-              <td>active</td>
-              <td>Senior</td>
-              <td>Senior</td>
-              <td>
-                <button
-                  class="button is-info is-small mr-1 p-2"
-                  onClick={() => setModalShow(true)}
-                >
-                  Edit Data
-                </button>
-                <MyVerticallyCenteredModal
-                  show={modalShow}
-                  onHide={() => setModalShow(false)}
-                />
-              </td>
-            </tr>
+            {examScore.map((e) => {
+              return (
+                <tr>
+                  <td>
+                    <img
+                      src={e.photo}
+                      style={{ width: 100, height: 100 }}
+                      class="rounded-circle"
+                    />
+                  </td>
+                  <td>
+                    <div>
+                      <div>
+                        <p>{e.fullName}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p>{e.className}</p>
+                  </td>
+                  <td>{e.ExamGrades[0]?.Exam.Course.name}</td>
+                  <td>{e.ExamGrades[0]?.score ? e.ExamGrades[0]?.score : 0}</td>
+                  <td>{e.ExamGrades[1]?.score ? e.ExamGrades[1]?.score : 0}</td>
+                  <td>{e.ExamGrades[2]?.score ? e.ExamGrades[2]?.score : 0}</td>
+                  <td>{e.ExamGrades[3]?.score ? e.ExamGrades[3]?.score : 0}</td>
+                  <td>
+                    {e.ExamGrades.length == 0 ? (
+                      <button
+                        class="button is-info is-small mr-1 p-2"
+                        onClick={() => {
+                          setModalShow(true);
+                          setIdi({
+                            ...idi,
+                            id: e.id,
+                          });
+                          console.log(e.id, "dari button");
+                        }}
+                      >
+                        Add Data
+                      </button>
+                    ) : (
+                      <button
+                        class="button is-info is-small mr-1 p-2"
+                        onClick={() => {
+                          setModalShow(true);
+                          setIdi({
+                            ...idi,
+                            id: e.id,
+                          });
+                          console.log(e.id, "dari button");
+                        }}
+                      >
+                        Edit Data
+                      </button>
+                    )}
+
+                    <MyVerticallyCenteredModal
+                      modalShow={modalShow}
+                      onHide={() => setModalShow(false)}
+                      setEdit={setEdit}
+                      edit={edit}
+                      idi={idi}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
     </div>
+  );
+}
+
+function MyVerticallyCenteredModal(props) {
+  const { setEdit, edit, modalShow, onHide, idi } = props;
+  const dispatch = useDispatch();
+  const submit = (e) => {
+    e.preventDefault();
+    console.log(edit, "<<<<ini dari submit");
+    dispatch(
+      editExam({
+        UAS: edit.UAS,
+        UTS: edit.UTS,
+        UL1: edit.UL1,
+        UL2: edit.UL2,
+      })
+    );
+
+    onHide();
+  };
+  return (
+    <Modal
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      show={modalShow}
+      onHide={onHide}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-center">
+          Edit Student Data Here
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <form onSubmit={submit}>
+          <div class="field">
+            <label className="label">Nilai UTS</label>
+            <input
+              class="form-control"
+              placeholder="Nilai UTS"
+              name="UTS"
+              value={edit.UTS.score}
+              onChange={(e) => {
+                setEdit({
+                  ...edit,
+                  UTS: {
+                    score: e.target.value,
+                    id: edit.UTS.id,
+                  },
+                });
+              }}
+            />
+          </div>
+          <div class="field">
+            <label className="label">Nilai UAS</label>
+            <input
+              class="form-control"
+              placeholder="Nilai UAS"
+              name="UAS"
+              value={edit.UAS.score}
+              onChange={(e) => {
+                setEdit({
+                  ...edit,
+                  UAS: {
+                    score: e.target.value,
+                    id: edit.UAS.id,
+                  },
+                });
+              }}
+            />
+          </div>
+          <div class="field">
+            <label className="label">Nilai Ulangan 1</label>
+            <input
+              class="form-control"
+              placeholder="Nilai UL1"
+              name="UL1"
+              value={edit.UL1.score}
+              onChange={(e) => {
+                setEdit({
+                  ...edit,
+                  UL1: {
+                    score: e.target.value,
+                    id: edit.UL1.id,
+                  },
+                });
+              }}
+            />
+          </div>
+          <div class="field">
+            <label className="label">Nilai Ulangan 2</label>
+            <input
+              class="form-control"
+              placeholder="Nilai UL2"
+              name="UL2"
+              value={edit.UL2.score}
+              onChange={(e) => {
+                setEdit({
+                  ...edit,
+                  UL2: {
+                    score: e.target.value,
+                    id: edit.UL2.id,
+                  },
+                });
+              }}
+            />
+          </div>
+          <div className="field">
+            <button type="submit" class="button is-success">
+              Submit
+            </button>
+            <button class="button">Cancel</button>
+          </div>
+        </form>
+      </Modal.Body>
+    </Modal>
   );
 }
