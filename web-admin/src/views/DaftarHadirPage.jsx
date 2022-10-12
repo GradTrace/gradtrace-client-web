@@ -77,8 +77,8 @@ export default function DaftarHadirPage() {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Kelas</th>
-                  <th scope="col">Tanggal</th>
+                  <th scope="col">Class</th>
+                  <th scope="col">Date</th>
                   <th scope="col">Status</th>
                 </tr>
               </thead>

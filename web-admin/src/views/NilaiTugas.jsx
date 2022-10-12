@@ -234,6 +234,11 @@ export default function DaftarTugas() {
                         <a href={el.url} target="_blank">
                           <button class="btn btn-primary">
                             <svg
+                              style={{
+                                marginTop: 0,
+                                marginBottom: 3,
+                                marginRight: 3,
+                              }}
                               xmlns="http://www.w3.org/2000/svg"
                               width="16"
                               height="16"
@@ -258,9 +263,14 @@ export default function DaftarTugas() {
                               id: el.id,
                             });
                           }}
-                          className="btn btn-success"
+                          className="btn btn-success shadow"
                         >
                           <svg
+                            style={{
+                              marginTop: 0,
+                              marginBottom: 3,
+                              marginRight: 3,
+                            }}
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"

@@ -428,7 +428,7 @@ export default function NilaiTugas() {
     <div class="card mt-2 shadow">
       <div className="container mt-2">
         <div className="row">
-          <h2> Tugas</h2>
+          <h2> Assignment</h2>
           <div className="col d-flex   justify-content-between">
             <button onClick={handleShow} className="btn m-2 btn-primary">
               Add Assignment
@@ -440,7 +440,7 @@ export default function NilaiTugas() {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Kelas</th>
+                  <th scope="col">Class</th>
                   <th scope="col">Deadline</th>
                   <th scope="col">Description</th>
                   <th style={{ textAlign: "center" }}>Actions</th>
@@ -489,6 +489,11 @@ export default function NilaiTugas() {
                         >
                           <div d-flex justify-content-center>
                             <svg
+                              style={{
+                                marginTop: 0,
+                                marginBottom: 3,
+                                marginRight: 3,
+                              }}
                               xmlns="http://www.w3.org/2000/svg"
                               width="17"
                               height="17"
@@ -514,6 +519,11 @@ export default function NilaiTugas() {
                           className="btn btn-success"
                         >
                           <svg
+                            style={{
+                              marginTop: 0,
+                              marginBottom: 3,
+                              marginRight: 3,
+                            }}
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"
