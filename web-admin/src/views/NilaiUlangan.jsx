@@ -6,7 +6,7 @@ import { fetchExamScore } from "../store/actions/actionExam";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { editExam } from "../store/actions/actionExam";
-import ModalPost from "../components/modalPost";
+import ModalPost from "../components/ModalPost";
 
 export default function NilaiUlangan() {
   const dispatch = useDispatch();
@@ -21,6 +21,11 @@ export default function NilaiUlangan() {
   const [populate, setPopulate] = useState({});
   const [idi, setIdi] = useState({
     id: 0,
+  });
+
+  const [idiPost, setIdiPost] = useState({
+    id: 0,
+    className: "",
   });
 
   const [edit, setEdit] = useState({
@@ -95,8 +100,8 @@ export default function NilaiUlangan() {
               <th class="text-center">Photo</th>
               <th class="text-center">Name</th>
               <th class="text-center">Kelas</th>
-              <th class="text-center">Nilai UTS</th>
               <th class="text-center">Nilai UAS</th>
+              <th class="text-center">Nilai UTS</th>
               <th class="text-center">Nilai Ulangan 1</th>
               <th class="text-center">Nilai Ulangan 2</th>
               <th class="text-center">Actions</th>
@@ -135,10 +140,12 @@ export default function NilaiUlangan() {
                         onClick={() => {
                           console.log(`masuk add`);
                           setShowModalPost(true);
-                          // setIdi({
-                          //   ...idi,
-                          //   id: e.id,
-                          // });
+                          console.log(showModalPost, "ini show modal post");
+                          setIdiPost({
+                            ...idiPost,
+                            id: e.id,
+                            className: e.className,
+                          });
                         }}
                       >
                         Add Data
@@ -152,33 +159,32 @@ export default function NilaiUlangan() {
                           setIdi({
                             ...idi,
                             id: e.id,
+                            className: e.className,
                           });
                         }}
                       >
                         Edit Data
                       </button>
                     )}
-
-                    <MyVerticallyCenteredModal
-                      modalShow={modalShow}
-                      onHide={() => setModalShow(false)}
-                      setEdit={setEdit}
-                      edit={edit}
-                      idi={idi}
-                    />
-                    <ModalPost
-                      showModalPost={showModalPost}
-                      onHide={() => setShowModalPost(false)}
-                      // setEdit={setEdit}
-                      // edit={edit}
-                      // idi={idi}
-                    />
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+        <ModalPost
+          showModalPost={showModalPost}
+          onHide={() => setShowModalPost(false)}
+          idiPost={idiPost}
+        />
+
+        <MyVerticallyCenteredModal
+          modalShow={modalShow}
+          onHide={() => setModalShow(false)}
+          setEdit={setEdit}
+          edit={edit}
+          idi={idi}
+        />
       </div>
     </div>
   );
