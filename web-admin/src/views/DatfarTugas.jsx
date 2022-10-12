@@ -17,8 +17,12 @@ export default function NilaiTugas() {
     return state.assignmentReducer.assignment;
   });
   console.log(assignment, "data assignment");
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    dispatch(fetchAssignmentGuru());
+    setLoading(true);
+    dispatch(fetchAssignmentGuru(page)).finally(() => {
+      setLoading(false);
+    });
   }, []);
   const [add, setAdd] = useState({
     description: "",
@@ -361,7 +365,7 @@ export default function NilaiTugas() {
   //     </>
   //   );
   // }
-
+  const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [editshow, seteditShow] = useState(false);
   const handleClose = () => {
@@ -375,8 +379,49 @@ export default function NilaiTugas() {
     setShow(true);
   };
 
+  const totalPage = useSelector((state) => {
+    return state.assignmentReducer.totalPage;
+  });
+  useEffect(() => {
+    dispatch(fetchAssignmentGuru(page));
+  }, [page]);
+
   if (!assignment) {
     return <h2>Loading ..</h2>;
+  }
+
+  /////
+  const next = (e) => {
+    console.log(page, "<<< page");
+    e.preventDefault();
+
+    if (page + 1 > totalPage) {
+      return;
+    }
+    setPage(page + 1);
+    // dispatch(fetchAssignment(className, page));
+  };
+  const previous = (e) => {
+    console.log(page, "<<< page");
+    e.preventDefault();
+    if (page == 1) {
+      return;
+    }
+    // dispatch(fetchAssignment(className, page - 1));
+    setPage(page - 1);
+  };
+
+  ////
+  if (loading) {
+    return (
+      <div class="d-flex justify-content-center align-items-center">
+        <img
+          src="https://i.imgur.com/llF5iyg.gif?noredirect"
+          alt="loading"
+          width={300}
+        />
+      </div>
+    );
   }
 
   return (
@@ -416,23 +461,45 @@ export default function NilaiTugas() {
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            dispatch(deletedAssignment({ id: el.id }))
-                              .then(() => {
-                                dispatch(fetchAssignmentGuru());
-                              })
-                              .then(() => {
-                                Swal.fire({
-                                  position: "top-end",
-                                  icon: "success",
-                                  title: "Success Deleted ..",
-                                  showConfirmButton: false,
-                                  timer: 1500,
-                                });
-                              });
+
+                            Swal.fire({
+                              title: "Are you sure?",
+                              text: "You won't be able to revert this!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#3085d6",
+                              cancelButtonColor: "#d33",
+                              confirmButtonText: "Yes, delete it!",
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                dispatch(deletedAssignment({ id: el.id })).then(
+                                  () => {
+                                    dispatch(fetchAssignmentGuru());
+                                  }
+                                );
+                                Swal.fire(
+                                  "Deleted!",
+                                  "Your file has been deleted.",
+                                  "success"
+                                );
+                              }
+                            });
                           }}
-                          className="m-2 btn btn-primary"
+                          className="m-2 btn btn-danger"
                         >
-                          Delete
+                          <div d-flex justify-content-center>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="17"
+                              height="17"
+                              fill="currentColor"
+                              class="bi bi-trash3-fill"
+                              viewBox="0 0 16 16"
+                            >
+                              <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                            </svg>
+                            Delete
+                          </div>
                         </button>
 
                         <button
@@ -444,8 +511,22 @@ export default function NilaiTugas() {
                               id: el.id,
                             });
                           }}
-                          className="btn btn-primary"
+                          className="btn btn-success"
                         >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-pencil-square"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path
+                              fill-rule="evenodd"
+                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                            />
+                          </svg>
                           Edit
                         </button>
                       </td>
@@ -467,6 +548,47 @@ export default function NilaiTugas() {
                 setEditSatu={setEditSatu}
               />
             </table>
+          </div>
+        </div>
+      </div>
+      <div className="container d-flex justify-content-center">
+        <div className="row">
+          <div className="col">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a onClick={previous} class="page-link" href="#">
+                    Previous
+                  </a>
+                </li>
+                {(() => {
+                  let td = [];
+                  for (let i = 1; i <= totalPage; i++) {
+                    td.push(
+                      <li class="page-item">
+                        <a
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPage(i);
+                          }}
+                          class="page-link"
+                          href="#"
+                        >
+                          {i}
+                        </a>
+                      </li>
+                    );
+                  }
+                  return td;
+                })()}
+
+                <li class="page-item">
+                  <a onClick={next} class="page-link" href="#">
+                    Next
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

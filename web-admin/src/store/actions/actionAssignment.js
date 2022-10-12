@@ -16,12 +16,12 @@ export const addAssignment = (payload) => {
     payload,
   };
 };
-export const deleteAssignment = (payload) => {
-  return {
-    type: "deleteAssignment",
-    payload,
-  };
-};
+// export const deleteAssignment = (payload) => {
+//   return {
+//     type: "deleteAssignment",
+//     payload,
+//   };
+// };
 export const edittAssignment = (payload) => {
   return {
     type: "editAssignment",
@@ -42,11 +42,16 @@ export const getAssignmentTugasguru = (payload) => {
 };
 
 //! INI UNTUK FETCH Assignment Student ( COMPONENT NILAI TUGASS !!)
-export const fetchAssignment = (className, page) => {
+export const fetchAssignment = (className, page, search) => {
   console.log(className, "dari reducer");
   return (dispatch) => {
+    let url = `http://localhost:3000/teachers/assignmentGrades?size=5&page=${page}&className=${className}`;
+    if (search) {
+      url += `&search=${search}`;
+    }
     return fetch(
-      `http://localhost:3000/teachers/assignment/paginate?size=5&page=${page}&className=${className}`,
+      // `http://localhost:3000/teachers/assignment/paginate?size=5&page=${page}&className=${className}`,
+      url,
       {
         headers: {
           access_token: localStorage.getItem("access_token"),
@@ -170,14 +175,18 @@ export const editAssignment = ({
   };
 };
 
-export const fetchAssignmentGuru = () => {
+export const fetchAssignmentGuru = (page) => {
   //! COMPONENT DAFTAR TUGASSSS
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignments`, {
-      headers: {
-        access_token: localStorage.getItem("access_token"),
-      },
-    })
+    // return fetch(`http://localhost:3000/teachers/assignments`, {
+    return fetch(
+      `http://localhost:3000/teachers/assignments?size=5&page=${page}`,
+      {
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Something Error Fetch Attendance");
@@ -205,8 +214,8 @@ export const deletedAssignment = ({ id }) => {
         return response.json();
       })
       .then((data) => {
-        dispatch(deleteAssignment(data));
-        dispatch(getAssignmentTugasguru());
+        // dispatch(deleteAssignment(data));
+        dispatch(fetchAssignmentGuru(1));
       });
   };
 };

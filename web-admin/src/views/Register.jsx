@@ -31,7 +31,7 @@ export default function Register() {
         return result.json();
       })
       .then((data) => {
-        navigate("/login");
+        navigate("/");
         Swal.fire({
           position: "top-end",
           icon: "success",
