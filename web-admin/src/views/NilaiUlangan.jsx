@@ -43,6 +43,7 @@ export default function NilaiUlangan() {
         return response.json();
       })
       .then((data) => {
+        console.log(data, "ini dari depan");
         let newEdit = {};
         data[0].ExamGrades.forEach((e) => {
           if (e.Exam.name === "UAS") {
