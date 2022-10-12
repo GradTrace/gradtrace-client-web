@@ -425,7 +425,7 @@ export default function NilaiTugas() {
   }
 
   return (
-    <div class="card mt-2 shadow " style={{ marginBottom: "370px" }}>
+    <div class="card mt-2 shadow ">
       <div className="container mt-2">
         <div className="row">
           <h2> Assignment</h2>

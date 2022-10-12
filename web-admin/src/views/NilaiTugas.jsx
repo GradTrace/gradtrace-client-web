@@ -152,7 +152,7 @@ export default function DaftarTugas() {
   }
 
   return (
-    <div class="card mt-2 shadow" style={{ marginBottom: "320px" }}>
+    <div class="card mt-2 shadow">
       <div class="card-body">
         <h2>Assignment Student</h2>
         <div className="container">
