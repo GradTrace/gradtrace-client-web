@@ -40,7 +40,7 @@ export default function DaftarHadirPage() {
   }
 
   return (
-    <div class="card mt-2 shadow">
+    <div class="card mt-2 shadow" style={{ marginBottom: "450px" }}>
       <section class="container">
         <div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 ">
           <h2 class="display-7 ">Daftar Hadir </h2>
@@ -71,8 +71,8 @@ export default function DaftarHadirPage() {
         </div>
 
         <div class="row ">
-          <div class="col-12 table-responsive">
-            <table class="table align-middle mb-0 bg-white">
+          <div class="col-12 table-responsive ">
+            <table class="tableDaftarTugas mb-2 table align-middle mb-0 bg-white">
               <thead class="bg-light text-align-center">
                 <tr>
                   <th scope="col">#</th>
