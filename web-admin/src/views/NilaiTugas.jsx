@@ -13,14 +13,21 @@ export default function DaftarTugas() {
   const assignments = useSelector((state) => {
     return state.assignmentReducer.assignments;
   });
+  console.log(assignments, "<<< data di component");
   const totalPage = useSelector((state) => {
     return state.assignmentReducer.totalPage;
   });
   console.log(totalPage, "dua bukan ?");
   console.log(assignments, "data dari networkkk");
   const [page, setPage] = useState(1);
+
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    dispatch(fetchAssignment("", page));
+    setLoading(true);
+    dispatch(fetchAssignment("", page)).finally(() => {
+      setLoading(false);
+    });
   }, []);
   const [idi, setIdi] = useState({
     id: 0,
@@ -68,15 +75,17 @@ export default function DaftarTugas() {
     console.log("handle show");
   };
 
+  //! =========== INI UNTUK FILTER BY KELAS ========== //!
   const [kelas, setKelas] = useState({
     className: "",
   });
   console.log(kelas, "<< data kelas");
   let className = kelas.className;
   useEffect(() => {
-    dispatch(fetchAssignment(className, page));
+    dispatch(fetchAssignment(className, page, name.name));
   }, [kelas]);
-  console.log(kelas);
+  console.log(className, "<< KELAS");
+  //! =========== INI UNTUK FILTER BY KELAS ========== //!
 
   const inputHandler = (e) => {
     setName({
@@ -87,16 +96,20 @@ export default function DaftarTugas() {
     name: "",
   });
   console.log(assignments, "<< data rredux");
-  let dataFilter;
-  if (name.name == "") {
-    dataFilter = assignments;
-  } else {
-    dataFilter = assignments.filter((el) =>
-      el.name.toLowerCase().includes(name.name.toLowerCase())
-    ); //! return nya harus booleadn
-  } //! pake include biar kaya ILIKE di sequelize nyari substring dalam string
-  console.log(dataFilter, "<<<< data filterran");
-  console.log(name.name, "<< name .name");
+  // let dataFilter;
+  // if (name.name == "") {
+  //   dataFilter = assignments;
+  // } else {
+  //   dataFilter = assignments.filter((el) =>
+  //     el.Assignment.name.toLowerCase().includes(name.name.toLowerCase())
+  //   ); //! return nya harus booleadn
+  // } //! pake include biar kaya ILIKE di sequelize nyari substring dalam string
+  // console.log(dataFilter, "<<<< data filterran");
+  // console.log(name.name, "<< name .name");
+
+  const searching = (e) => {
+    dispatch(fetchAssignment(className, page, name.name));
+  };
 
   const filtering = (e) => {
     e.preventDefault();
@@ -125,114 +138,172 @@ export default function DaftarTugas() {
     // dispatch(fetchAssignment(className, page - 1));
     setPage(page - 1);
   };
+
+  if (loading) {
+    return (
+      <div class="d-flex justify-content-center align-items-center">
+        <img
+          src="https://i.imgur.com/llF5iyg.gif?noredirect"
+          alt="loading"
+          width={300}
+        />
+      </div>
+    );
+  }
+
   return (
     <div class="card mt-2 shadow">
       <div class="card-body">
         <h2>Assignment Student</h2>
         <div className="container">
           <div className="row">
-            <label htmlFor=""> filter by Class</label>
-            <select
-              name="className"
-              onChange={(e) => {
-                setKelas({
-                  ...kelas,
-                  className: e.target.value,
-                });
-              }}
-              class="form-select container"
-              aria-label="Default select example"
-            >
-              <option selected disabled>
-                Open this select menu
-              </option>
-              <option value="9">9</option>
-              <option value="8">8</option>
-              <option value="7">7</option>
-            </select>
-            <form onSubmit={filtering} action="">
-              <div class="input-group mt-3 d-flex justify-content-center">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="submit"
-                  id="button-addon1"
-                >
-                  Search
-                </button>
-                <input
-                  name="search"
-                  onChange={inputHandler}
-                  type="text"
-                  class="form-control"
-                  placeholder="search by assignment"
-                  aria-label="Example text with button addon"
-                  aria-describedby="button-addon1"
-                />
-              </div>
-            </form>
+            <div class="control">
+              <label htmlFor=""> filter by Class</label>
+              <select
+                name="className"
+                onChange={(e) => {
+                  setKelas({
+                    ...kelas,
+                    className: e.target.value,
+                  });
+                }}
+                class=" filter"
+                aria-label="Default select example"
+              >
+                <option selected disabled>
+                  Open this select menu
+                </option>
+                <option value="9">9</option>
+                <option value="8">8</option>
+                <option value="7">7</option>
+              </select>
+              <form onSubmit={filtering} action="">
+                <div class="input-group search d-flex justify-content-center">
+                  <button
+                    onClick={searching}
+                    class="btn btn-outline-secondary"
+                    type="submit"
+                    id="button-addon1"
+                  >
+                    Search
+                  </button>
+                  <input
+                    name="search"
+                    onChange={inputHandler}
+                    type="text"
+                    class="form-control"
+                    placeholder="search by assignment"
+                    aria-label="Example text with button addon"
+                    aria-describedby="button-addon1"
+                  />
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-        <div className="col-12 container table-responsive">
-          <table className="table table-striped align-middle bg-white ">
-            <thead className="table-light bg-white">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Assignment</th>
-                <th scope="col">Class</th>
-                <th scope="col">Deadline</th>
-                <th scope="col">Description</th>
-                <th scope="col">Score</th>
-                <th scope="col">Link Assignment</th>
-                <th style={{ textAlign: "center" }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataFilter.map((el, i) => {
-                return (
-                  <tr style={{ textAlign: "left" }} key={el.id}>
-                    <td>{i + 1 + (page - 1) * 5}</td>
-                    <td>{el.AssignmentGrades[0]?.Student.fullName}</td>
-                    <td>{el.name}</td>
-                    <td>{el.className}</td>
-                    <td>{el.deadline.split("T")[0]}</td>
-                    <td>{el.description}</td>
-                    <td>{el.AssignmentGrades[0]?.score}</td>
-                    <td>
-                      <a href={el.AssignmentGrades[0]?.url} target="_blank">
-                        {el.AssignmentGrades[0]?.url}
-                      </a>
-                    </td>
-                    <td style={{ textAlign: "center" }}>
-                      <button
-                        onClick={() => {
-                          console.log("masuk");
-                          seteditShow(true);
-                          setIdi({
-                            ...idi,
-                            id: el.AssignmentGrades[0].id,
-                          });
-                        }}
-                        className="btn btn-primary"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-            <EditModal
-              id={edit.id}
-              edit={edit}
-              setEdit={setEdit}
-              editshow={editshow}
-              handleClose={handleClose}
-              handleShow={handleShow}
-              page={page}
-            />
-          </table>
-        </div>
+        {assignments.length == 0 ? (
+          <h2 class="mb-2">EMPTY DATA.. </h2>
+        ) : (
+          <div className="col-12 container table-responsive">
+            <table className="table table-striped align-middle bg-white ">
+              <thead className="table-light bg-white">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Assignment</th>
+                  <th scope="col">Class</th>
+                  <th scope="col">Deadline</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Score</th>
+                  <th scope="col">Link Assignment</th>
+                  <th style={{ textAlign: "center" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {assignments.map((el, i) => {
+                  return (
+                    <tr style={{ textAlign: "left" }} key={el.id}>
+                      <td>{i + 1 + (page - 1) * 5}</td>
+                      <td>{el.Student.fullName}</td>
+                      <td>{el.Assignment.name}</td>
+                      <td>{el.Student.className}</td>
+                      <td>{el.Assignment.deadline.split("T")[0]}</td>
+                      <td>{el.Assignment.description}</td>
+                      <td>{el.score}</td>
+                      <td>
+                        <a href={el.url} target="_blank">
+                          <button class="btn btn-primary">
+                            <svg
+                              style={{
+                                marginTop: 0,
+                                marginBottom: 3,
+                                marginRight: 3,
+                              }}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              fill="currentColor"
+                              class="bi bi-link"
+                              viewBox="0 0 16 16"
+                            >
+                              <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
+                              <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
+                            </svg>{" "}
+                            Link Tugas
+                          </button>
+                        </a>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          onClick={() => {
+                            console.log("masuk");
+                            seteditShow(true);
+                            setIdi({
+                              ...idi,
+                              id: el.id,
+                            });
+                          }}
+                          className="btn btn-success shadow"
+                        >
+                          <svg
+                            style={{
+                              marginTop: 0,
+                              marginBottom: 3,
+                              marginRight: 3,
+                            }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-pencil-square"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path
+                              fill-rule="evenodd"
+                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                            />
+                          </svg>
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <EditModal
+                id={edit.id}
+                edit={edit}
+                setEdit={setEdit}
+                editshow={editshow}
+                handleClose={handleClose}
+                handleShow={handleShow}
+                page={page}
+              />
+            </table>
+          </div>
+        )}
+
         <div className="container d-flex justify-content-center">
           <div className="row">
             <div className="col">

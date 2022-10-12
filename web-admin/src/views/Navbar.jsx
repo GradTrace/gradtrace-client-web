@@ -43,7 +43,7 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/nilaiTugas"}
                 >
-                  Tugas
+                  Assignment
                 </Link>
               </li>
               <li class="nav-item">
@@ -52,7 +52,7 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/daftarTugas"}
                 >
-                  Daftar Tugas
+                  List Assignment
                 </Link>
               </li>
               <li class="nav-item">
@@ -61,7 +61,7 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/nilaiUlangan"}
                 >
-                  Nilai Ulangan
+                  Test Scores
                 </Link>
               </li>
               <li class="nav-item">
@@ -70,7 +70,7 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/daftarHadir"}
                 >
-                  Daftar Hadir
+                  List of Attendees
                 </Link>
               </li>
               <li class="nav-item">

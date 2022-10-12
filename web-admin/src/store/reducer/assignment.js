@@ -7,7 +7,11 @@ const initialState = {
 function assignmentReducer(state = initialState, action) {
   switch (action.type) {
     case "getAssignment": //! daftar tugas
-      return { ...state, assignment: action.payload };
+      return {
+        ...state,
+        assignment: action.payload.rows,
+        totalPage: Math.ceil(action.payload.count / 5),
+      };
     case "getAssignments": //! nilai tugas
       return {
         ...state,

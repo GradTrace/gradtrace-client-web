@@ -7,6 +7,7 @@ export default function DaftarHadirPage() {
   const attendances = useSelector((state) => {
     return state.teacherReducer.attendances;
   });
+  const [loading, setLoading] = useState(false);
   console.log(attendances);
   const dispatch = useDispatch();
   const [kelas, setKelas] = useState({
@@ -14,7 +15,10 @@ export default function DaftarHadirPage() {
   });
 
   useEffect(() => {
-    dispatch(fetchAttendance());
+    setLoading(true);
+    dispatch(fetchAttendance()).finally(() => {
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -22,62 +26,80 @@ export default function DaftarHadirPage() {
   }, [kelas]);
 
   console.log(kelas.className, "<<<");
-  return (
-    <section class="container-fluid">
-      <div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h2 class="display-7 ">Daftar Hadir </h2>
-        {/* <button class="btn btn-primary ">New Items</button> */}
-      </div>
-      <div className="container-fluid">
-        <div className="row">
-          <select
-            name="className"
-            onChange={(e) => {
-              setKelas({
-                ...kelas,
-                className: e.target.value,
-              });
-            }}
-            class="form-select"
-            aria-label="Default select example"
-          >
-            <option selected value="9">
-              9
-            </option>
-            <option value="8">8</option>
-            <option value="7">7</option>
-          </select>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-12 table-responsive">
-          <table class="table align-middle mb-0 bg-white">
-            <thead class="bg-light text-align-center">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Kelas</th>
-                <th scope="col">Tanggal</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {attendances.map((el, i) => {
-                return (
-                  <tr style={{ textAlign: "left" }} key={el.id}>
-                    <td>{i + 1}</td>
-                    <td>{el.Student.fullName}</td>
-                    <td>{el.Student.className}</td>
-                    <td>{el.dateAndTime.split("T")[0]}</td>
-                    <td>{el.status == true ? "Masuk" : "belum masuk"}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+  if (loading) {
+    return (
+      <div class="d-flex justify-content-center align-items-center">
+        <img
+          src="https://i.imgur.com/llF5iyg.gif?noredirect"
+          alt="loading"
+          width={300}
+        />
       </div>
-    </section>
+    );
+  }
+
+  return (
+    <div class="card mt-2 shadow">
+      <section class="container">
+        <div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 ">
+          <h2 class="display-7 ">Daftar Hadir </h2>
+          {/* <button class="btn btn-primary ">New Items</button> */}
+        </div>
+
+        <div class="daftarhadir">
+          <div className="col-6">
+            <label htmlFor="">Filter By Class</label>
+            <select
+              name="className"
+              onChange={(e) => {
+                setKelas({
+                  ...kelas,
+                  className: e.target.value,
+                });
+              }}
+              class="form-select col-6"
+              aria-label="Default select example"
+            >
+              <option selected value="9">
+                9
+              </option>
+              <option value="8">8</option>
+              <option value="7">7</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col-12 table-responsive">
+            <table class="table align-middle mb-0 bg-white">
+              <thead class="bg-light text-align-center">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Class</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {attendances.map((el, i) => {
+                  return (
+                    <tr style={{ textAlign: "left" }} key={el.id}>
+                      <td>{i + 1}</td>
+                      <td>{el.Student.fullName}</td>
+                      <td>{el.Student.className}</td>
+                      <td>{el.dateAndTime.split("T")[0]}</td>
+                      <td>{el.status == true ? "Masuk" : "belum masuk"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <div class="card-body"></div>
+    </div>
   );
 }
