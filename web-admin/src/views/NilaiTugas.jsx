@@ -152,7 +152,7 @@ export default function DaftarTugas() {
   }
 
   return (
-    <div class="card mt-2 shadow">
+    <div class="card mt-2 shadow" style={{ marginBottom: "320px" }}>
       <div class="card-body">
         <h2>Assignment Student</h2>
         <div className="container">
@@ -205,7 +205,7 @@ export default function DaftarTugas() {
           <h2 class="mb-2">EMPTY DATA.. </h2>
         ) : (
           <div className="col-12 container table-responsive">
-            <table className="table table-striped align-middle bg-white ">
+            <table className=" table tableDaftarTugas table-striped align-middle bg-white ">
               <thead className="table-light bg-white">
                 <tr>
                   <th scope="col">#</th>
@@ -223,14 +223,16 @@ export default function DaftarTugas() {
                 {assignments.map((el, i) => {
                   return (
                     <tr style={{ textAlign: "left" }} key={el.id}>
-                      <td>{i + 1 + (page - 1) * 5}</td>
-                      <td>{el.Student.fullName}</td>
-                      <td>{el.Assignment.name}</td>
-                      <td>{el.Student.className}</td>
-                      <td>{el.Assignment.deadline.split("T")[0]}</td>
-                      <td>{el.Assignment.description}</td>
-                      <td>{el.score}</td>
-                      <td>
+                      <td class="align-middle">{i + 1 + (page - 1) * 5}</td>
+                      <td class="align-middle">{el.Student.fullName}</td>
+                      <td class="align-middle">{el.Assignment.name}</td>
+                      <td class="align-middle">{el.Student.className}</td>
+                      <td class="align-middle">
+                        {el.Assignment.deadline.split("T")[0]}
+                      </td>
+                      <td class="align-middle">{el.Assignment.description}</td>
+                      <td class="align-middle">{el.score}</td>
+                      <td class="align-middle">
                         <a href={el.url} target="_blank">
                           <button class="btn btn-primary">
                             <svg

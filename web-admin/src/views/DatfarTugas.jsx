@@ -425,7 +425,7 @@ export default function NilaiTugas() {
   }
 
   return (
-    <div class="card mt-2 shadow">
+    <div class="card mt-2 shadow " style={{ marginBottom: "370px" }}>
       <div className="container mt-2">
         <div className="row">
           <h2> Assignment</h2>
@@ -435,7 +435,7 @@ export default function NilaiTugas() {
             </button>
           </div>
           <div className="col-12 table-responsive">
-            <table className="table  table-striped align-middle bg-white ">
+            <table className=" tableDaftarTugas table table-striped align-middle bg-white ">
               <thead className="table-light rounded bg-white">
                 <tr>
                   <th scope="col">#</th>
@@ -449,15 +449,19 @@ export default function NilaiTugas() {
               <tbody>
                 {assignment.map((el, i) => {
                   return (
-                    <tr style={{ textAlign: "left" }} key={el.id}>
-                      <td>{i + 1}</td>
+                    <tr
+                      className="tr1"
+                      style={{ textAlign: "left" }}
+                      key={el.id}
+                    >
+                      <td class="align-middle">{i + 1}</td>
 
-                      <td>{el.name}</td>
+                      <td class="align-middle">{el.name}</td>
 
-                      <td>{el.className}</td>
-                      <td>{el.deadline.split("T")[0]}</td>
-                      <td>{el.description}</td>
-                      <td style={{ textAlign: "center" }}>
+                      <td class="align-middle">{el.className}</td>
+                      <td class="align-middle">{el.deadline.split("T")[0]}</td>
+                      <td class="align-middle">{el.description}</td>
+                      <td style={{ textAlign: "center" }} class="align-middle">
                         <button
                           onClick={(e) => {
                             e.preventDefault();

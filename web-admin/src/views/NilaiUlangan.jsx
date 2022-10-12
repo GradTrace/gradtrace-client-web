@@ -88,7 +88,7 @@ export default function NilaiUlangan() {
   }
   let no = 1;
   return (
-    <div>
+    <div style={{ marginBottom: "320px" }}>
       <br />
       <h1>Nilai Ulangan</h1>
       <div className="container">
