@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 export default function Footer() {
   // const someComponent = withRouter(props)
   const location = useLocation();
-  console.log(location.pathname, "<<<<< footer");
+  // console.log(location.pathname, "<<<<< footer");
   const footer = () => {
     if (
       location.pathname == "/nilaiTugas" ||
