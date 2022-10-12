@@ -90,7 +90,7 @@ export default function NilaiUlangan() {
   return (
     <div style={{ marginBottom: "320px" }}>
       <br />
-      <h1>Nilai Ulangan</h1>
+      <h1>Exam Scores</h1>
       <div className="container">
         <br />
         <table class="table align-middle mb-0 bg-white">
@@ -99,11 +99,11 @@ export default function NilaiUlangan() {
               <th class="text-center">#</th>
               <th class="text-center">Photo</th>
               <th class="text-center">Name</th>
-              <th class="text-center">Kelas</th>
-              <th class="text-center">Nilai UAS</th>
-              <th class="text-center">Nilai UTS</th>
-              <th class="text-center">Nilai Ulangan 1</th>
-              <th class="text-center">Nilai Ulangan 2</th>
+              <th class="text-center">Class</th>
+              <th class="text-center">UAS Score</th>
+              <th class="text-center">UTS Score</th>
+              <th class="text-center">Daily Exam 1</th>
+              <th class="text-center">Daily Exam 2</th>
               <th class="text-center">Actions</th>
             </tr>
           </thead>

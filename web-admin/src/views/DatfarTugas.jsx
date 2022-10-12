@@ -428,7 +428,7 @@ export default function NilaiTugas() {
     <div class="card mt-2 shadow " style={{ marginBottom: "370px" }}>
       <div className="container mt-2">
         <div className="row">
-          <h2> Assignment</h2>
+          <h2>Assignment List</h2>
           <div className="col d-flex   justify-content-between">
             <button onClick={handleShow} className="btn m-2 btn-primary">
               Add Assignment
@@ -454,7 +454,7 @@ export default function NilaiTugas() {
                       style={{ textAlign: "left" }}
                       key={el.id}
                     >
-                      <td class="align-middle">{i + 1}</td>
+                      <td class="align-middle">{i + 1 + (page - 1) * 5}</td>
 
                       <td class="align-middle">{el.name}</td>
 

@@ -154,11 +154,11 @@ export default function DaftarTugas() {
   return (
     <div class="card mt-2 shadow" style={{ marginBottom: "320px" }}>
       <div class="card-body">
-        <h2>Assignment Student</h2>
+        <h2>Student Assignment</h2>
         <div className="container">
           <div className="row">
             <div class="control">
-              <label htmlFor=""> filter by Class</label>
+              <label htmlFor="">Filter by class</label>
               <select
                 name="className"
                 onChange={(e) => {
@@ -171,7 +171,7 @@ export default function DaftarTugas() {
                 aria-label="Default select example"
               >
                 <option selected disabled>
-                  Open this select menu
+                  All
                 </option>
                 <option value="9">9</option>
                 <option value="8">8</option>
@@ -192,7 +192,7 @@ export default function DaftarTugas() {
                     onChange={inputHandler}
                     type="text"
                     class="form-control"
-                    placeholder="search by assignment"
+                    placeholder="Search by assignment name"
                     aria-label="Example text with button addon"
                     aria-describedby="button-addon1"
                   />
@@ -210,12 +210,12 @@ export default function DaftarTugas() {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Assignment</th>
+                  <th scope="col">Assignment Name</th>
                   <th scope="col">Class</th>
                   <th scope="col">Deadline</th>
                   <th scope="col">Description</th>
                   <th scope="col">Score</th>
-                  <th scope="col">Link Assignment</th>
+                  <th scope="col">Assignment Link</th>
                   <th style={{ textAlign: "center" }}>Actions</th>
                 </tr>
               </thead>
@@ -251,7 +251,7 @@ export default function DaftarTugas() {
                               <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
                               <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
                             </svg>{" "}
-                            Link Tugas
+                            Link
                           </button>
                         </a>
                       </td>

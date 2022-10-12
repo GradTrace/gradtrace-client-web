@@ -19,12 +19,12 @@ export default function Navbar() {
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse  navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav alignSelf-center">
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav align-items-center">
               <a class="navbar-brand" href="#">
                 <img
                   src="https://i.imgur.com/qXK2RMo.png"
-                  width="100"
+                  width="150"
                   height="40"
                 />
               </a>
@@ -52,7 +52,7 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/daftarTugas"}
                 >
-                  List Assignment
+                  Assignment List
                 </Link>
               </li>
               <li class="nav-item">
@@ -61,7 +61,7 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/nilaiUlangan"}
                 >
-                  Test Scores
+                  Exam Scores
                 </Link>
               </li>
               <li class="nav-item">

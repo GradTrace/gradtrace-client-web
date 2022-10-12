@@ -87,7 +87,7 @@ export default function Register() {
                   >
                     <div class="col-12">
                       <label for="yourName" class="form-label">
-                        Your Name
+                        Full name
                       </label>
                       <input
                         onChange={(e) => {
@@ -123,17 +123,19 @@ export default function Register() {
                         aria-label="Default select example"
                       >
                         <option selected disabled>
-                          Open this select Course
+                          Select course
                         </option>
                         <option value="1">Mathematics</option>
                         <option value="2">Biology</option>
                         <option value="3">English</option>
+                        <option value="4">Physics</option>
+                        <option value="5">Physical Education</option>
                       </select>
                     </div>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">
-                        Your Email
+                        Email address
                       </label>
                       <input
                         onChange={(e) => {
