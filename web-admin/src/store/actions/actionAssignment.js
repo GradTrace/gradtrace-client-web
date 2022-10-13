@@ -4,6 +4,9 @@
 //     payload,
 //   };
 // };
+
+import { Url } from "../../components/Url";
+
 export const getAssignments = (payload) => {
   return {
     type: "getAssignments",
@@ -45,7 +48,7 @@ export const getAssignmentTugasguru = (payload) => {
 export const fetchAssignment = (className, page, search) => {
   // console.log(className, "dari reducer");
   return (dispatch) => {
-    let url = `http://localhost:3000/teachers/assignmentGrades?size=5&page=${page}&className=${className}`;
+    let url = `${Url}teachers/assignmentGrades?size=5&page=${page}&className=${className}`;
     if (search) {
       url += `&search=${search}`;
     }
@@ -79,7 +82,7 @@ export const addingAssignment = ({
   className,
 }) => {
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignment`, {
+    return fetch(`${Url}teachers/assignment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -111,7 +114,7 @@ export const addingAssignment = ({
 export const editAssignmentScores = ({ score, id }) => {
   // console.log(id, "masuk dari reeduxS");
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignmentGrades/${id}`, {
+    return fetch(`${Url}teachers/assignmentGrades/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -145,7 +148,7 @@ export const editAssignment = ({
   id,
 }) => {
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignment/${id}`, {
+    return fetch(`${Url}teachers/assignment/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -179,14 +182,11 @@ export const fetchAssignmentGuru = (page) => {
   //! COMPONENT DAFTAR TUGASSSS
   return (dispatch) => {
     // return fetch(`http://localhost:3000/teachers/assignments`, {
-    return fetch(
-      `http://localhost:3000/teachers/assignments?size=5&page=${page}`,
-      {
-        headers: {
-          access_token: localStorage.getItem("access_token"),
-        },
-      }
-    )
+    return fetch(`${Url}teachers/assignments?size=5&page=${page}`, {
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Something Error Fetch Attendance");
@@ -201,7 +201,7 @@ export const fetchAssignmentGuru = (page) => {
 };
 export const deletedAssignment = ({ id }) => {
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/assignment/${id}`, {
+    return fetch(`${Url}teachers/assignment/${id}`, {
       method: "DELETE",
       headers: {
         access_token: localStorage.getItem("access_token"),

@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 import { editAssignmentScores } from "../store/actions/actionAssignment";
+import { Url } from "../components/Url";
 
 import Swal from "sweetalert2";
 export default function DaftarTugas() {
@@ -40,7 +41,7 @@ export default function DaftarTugas() {
 
   // console.log(idi, "ini id");
   useEffect(() => {
-    fetch(`http://localhost:3000/teachers/assignmentGrades/${idi.id}`, {
+    fetch(`${Url}teachers/assignmentGrades/${idi.id}`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },

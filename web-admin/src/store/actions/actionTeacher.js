@@ -1,3 +1,5 @@
+import { Url } from "../../components/Url";
+
 export const getAttendances = (payload) => {
   return {
     type: "getAttendances",
@@ -9,7 +11,7 @@ export const fetchAttendance = (className) => {
   return (dispatch) => {
     // console.log(id, "<<< id dari dalem");
 
-    return fetch(`http://localhost:3000/teachers/attendances/${className}`, {
+    return fetch(`${Url}teachers/attendances/${className}`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },
