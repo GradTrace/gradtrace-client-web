@@ -9,6 +9,7 @@ import { addingAssignment } from "../store/actions/actionAssignment";
 import { deletedAssignment } from "../store/actions/actionAssignment";
 import { editAssignment } from "../store/actions/actionAssignment";
 import Swal from "sweetalert2";
+import { Url } from "../components/Url";
 
 export default function NilaiTugas() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ export default function NilaiTugas() {
   //!BUAT POPULATE DATA
   useEffect(() => {
     if (idi.id !== 0) {
-      fetch(`http://localhost:3000/teachers/assignment/${idi.id}`, {
+      fetch(`${Url}teachers/assignment/${idi.id}`, {
         headers: {
           access_token: localStorage.getItem("access_token"),
         },
