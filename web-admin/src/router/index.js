@@ -35,6 +35,10 @@ const router = createBrowserRouter([
             path: "/daftarHadir",
             element: <DaftarHadirPage />,
           },
+          {
+            path: "/",
+            element: <DaftarTugas />,
+          },
         ],
       },
     ],
