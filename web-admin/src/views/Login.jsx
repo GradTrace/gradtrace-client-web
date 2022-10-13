@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Url } from "../components/Url";
 
 export default function Login() {
   const [login, setLogin] = useState({
@@ -10,7 +11,7 @@ export default function Login() {
   const navigate = useNavigate();
   const loginken = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000/teachers/login", {
+    fetch(`${Url}teachers/login`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",

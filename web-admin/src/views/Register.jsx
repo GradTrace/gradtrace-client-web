@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Url } from "../components/Url";
 // import GradTrace from "././public/GradTrace-logo.png";
 import Swal from "sweetalert2";
 export default function Register() {
@@ -12,7 +13,7 @@ export default function Register() {
   });
   const registerken = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000/teachers/register", {
+    fetch(`${Url}teachers/register`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
