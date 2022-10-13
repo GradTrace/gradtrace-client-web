@@ -1,3 +1,4 @@
+import { Url } from "../../components/Url";
 export const getScore = (payload) => {
   return {
     type: "getExamScore",
@@ -14,7 +15,7 @@ export const editExamScore = (payload) => {
 
 export const fetchExamScore = () => {
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/exams/score`, {
+    return fetch(`${Url}teachers/exams/score`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },
@@ -36,7 +37,7 @@ export const fetchExamScore = () => {
 export const editExam = ({ UAS, UTS, UL1, UL2 }) => {
   console.log(UAS, UTS, UL1, "submit");
   return (dispatch) => {
-    return fetch(`http://localhost:3000/teachers/exams/score`, {
+    return fetch(`${Url}teachers/exams/score`, {
       method: "put",
       headers: {
         access_token: localStorage.getItem("access_token"),
