@@ -6,6 +6,7 @@ import { fetchExamScore } from "../store/actions/actionExam";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { editExam } from "../store/actions/actionExam";
+import { Url } from "../components/Url";
 import ModalPost from "../components/ModalPost";
 
 export default function NilaiUlangan() {
@@ -36,7 +37,7 @@ export default function NilaiUlangan() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:3000/teachers/exams/score/${idi.id}`, {
+    fetch(`${Url}teachers/exams/score/${idi.id}`, {
       headers: {
         access_token: localStorage.getItem("access_token"),
       },

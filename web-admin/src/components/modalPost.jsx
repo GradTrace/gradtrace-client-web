@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { editExam } from "../store/actions/actionExam";
+import { Url } from "./Url";
 
 export default function ModalPost(props) {
   const { showModalPost, onHide, idiPost } = props;
@@ -18,7 +19,7 @@ export default function ModalPost(props) {
   useEffect(() => {
     console.log("masuk use effect depan");
     if (idiPost.id !== 0 && showModalPost) {
-      fetch(`http://localhost:3000/teachers/exams/${idiPost.className}`, {
+      fetch(`${Url}teachers/exams/${idiPost.className}`, {
         method: "get",
         headers: {
           access_token: localStorage.getItem("access_token"),
