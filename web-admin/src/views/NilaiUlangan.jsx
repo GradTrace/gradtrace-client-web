@@ -6,6 +6,8 @@ import { fetchExamScore } from "../store/actions/actionExam";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { editExam } from "../store/actions/actionExam";
+import ModalPost from "../components/ModalPost";
+
 export default function NilaiUlangan() {
   const dispatch = useDispatch();
   const examScore = useSelector((state) => {
@@ -19,6 +21,11 @@ export default function NilaiUlangan() {
   const [populate, setPopulate] = useState({});
   const [idi, setIdi] = useState({
     id: 0,
+  });
+
+  const [idiPost, setIdiPost] = useState({
+    id: 0,
+    className: "",
   });
 
   const [edit, setEdit] = useState({
@@ -41,12 +48,9 @@ export default function NilaiUlangan() {
         return response.json();
       })
       .then((data) => {
+        console.log(data, "ini dari depan");
         let newEdit = {};
         data[0].ExamGrades.forEach((e) => {
-          console.log(e.score);
-          console.log(e.Exam.name);
-          console.log(e.id, ",");
-
           if (e.Exam.name === "UAS") {
             newEdit.UAS = {
               score: e.score,
@@ -74,6 +78,7 @@ export default function NilaiUlangan() {
   }, [idi]);
   // start modal
   const [modalShow, setModalShow] = React.useState(false);
+  const [showModalPost, setShowModalPost] = React.useState(false);
   // end of modal
   if (!populate) {
     return <h2>Loading...</h2>;
@@ -81,7 +86,7 @@ export default function NilaiUlangan() {
   if (!examScore) {
     return <h2>Loading...</h2>;
   }
-
+  let no = 1;
   return (
     <div style={{ marginBottom: "320px" }}>
       <br />
@@ -91,12 +96,12 @@ export default function NilaiUlangan() {
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light text-align-center">
             <tr>
+              <th class="text-center">#</th>
               <th class="text-center">Photo</th>
               <th class="text-center">Name</th>
               <th class="text-center">Kelas</th>
-              <th class="text-center">Mata Pelajaran</th>
-              <th class="text-center">Nilai UTS</th>
               <th class="text-center">Nilai UAS</th>
+              <th class="text-center">Nilai UTS</th>
               <th class="text-center">Nilai Ulangan 1</th>
               <th class="text-center">Nilai Ulangan 2</th>
               <th class="text-center">Actions</th>
@@ -106,6 +111,7 @@ export default function NilaiUlangan() {
             {examScore.map((e) => {
               return (
                 <tr>
+                  <td>{no++}</td>
                   <td>
                     <img
                       src={e.photo}
@@ -123,7 +129,6 @@ export default function NilaiUlangan() {
                   <td>
                     <p>{e.className}</p>
                   </td>
-                  <td>{e.ExamGrades[0]?.Exam.Course.name}</td>
                   <td>{e.ExamGrades[0]?.score ? e.ExamGrades[0]?.score : 0}</td>
                   <td>{e.ExamGrades[1]?.score ? e.ExamGrades[1]?.score : 0}</td>
                   <td>{e.ExamGrades[2]?.score ? e.ExamGrades[2]?.score : 0}</td>
@@ -131,14 +136,16 @@ export default function NilaiUlangan() {
                   <td>
                     {e.ExamGrades.length == 0 ? (
                       <button
-                        class="button is-info is-small mr-1 p-2"
+                        class="button is-warning is-small mr-1 p-2"
                         onClick={() => {
-                          setModalShow(true);
-                          setIdi({
-                            ...idi,
+                          console.log(`masuk add`);
+                          setShowModalPost(true);
+                          console.log(showModalPost, "ini show modal post");
+                          setIdiPost({
+                            ...idiPost,
                             id: e.id,
+                            className: e.className,
                           });
-                          console.log(e.id, "dari button");
                         }}
                       >
                         Add Data
@@ -147,31 +154,37 @@ export default function NilaiUlangan() {
                       <button
                         class="button is-info is-small mr-1 p-2"
                         onClick={() => {
+                          console.log(`masuk button`);
                           setModalShow(true);
                           setIdi({
                             ...idi,
                             id: e.id,
+                            className: e.className,
                           });
-                          console.log(e.id, "dari button");
                         }}
                       >
                         Edit Data
                       </button>
                     )}
-
-                    <MyVerticallyCenteredModal
-                      modalShow={modalShow}
-                      onHide={() => setModalShow(false)}
-                      setEdit={setEdit}
-                      edit={edit}
-                      idi={idi}
-                    />
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+        <ModalPost
+          showModalPost={showModalPost}
+          onHide={() => setShowModalPost(false)}
+          idiPost={idiPost}
+        />
+
+        <MyVerticallyCenteredModal
+          modalShow={modalShow}
+          onHide={() => setModalShow(false)}
+          setEdit={setEdit}
+          edit={edit}
+          idi={idi}
+        />
       </div>
     </div>
   );
