@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { editExam } from "../store/actions/actionExam";
 import { Url } from "../components/Url";
-import ModalPost from "../components/ModalPost";
+import ModalPost from "../components/modalPost";
 
 export default function NilaiUlangan() {
   const dispatch = useDispatch();
