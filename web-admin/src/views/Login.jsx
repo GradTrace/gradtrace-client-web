@@ -29,7 +29,7 @@ export default function Login() {
       })
       .then((data) => {
         localStorage.setItem("access_token", data.access_token);
-        navigate("/");
+        navigate("/daftarTugas");
         Swal.fire({
           position: "top-end",
           icon: "success",

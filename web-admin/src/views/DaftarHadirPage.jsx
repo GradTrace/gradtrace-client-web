@@ -43,7 +43,7 @@ export default function DaftarHadirPage() {
     <div class="card mt-2 shadow" style={{ marginBottom: "450px" }}>
       <section class="container">
         <div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 ">
-          <h2 class="display-7 ">List of Atendees</h2>
+          <h2 class="display-7 ">Student Attendance</h2>
           {/* <button class="btn btn-primary ">New Items</button> */}
         </div>
 

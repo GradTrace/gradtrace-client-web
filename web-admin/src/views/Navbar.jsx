@@ -70,7 +70,7 @@ export default function Navbar() {
                   aria-current="page"
                   to={"/daftarHadir"}
                 >
-                  List of Attendees
+                  Student Attendance
                 </Link>
               </li>
               <li class="nav-item">
