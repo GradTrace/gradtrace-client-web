@@ -16,7 +16,7 @@ export default function NilaiTugas() {
   const assignment = useSelector((state) => {
     return state.assignmentReducer.assignment;
   });
-  console.log(assignment, "data assignment");
+  // console.log(assignment, "data assignment");
   const [page, setPage] = useState(1);
   useEffect(() => {
     setLoading(true);
@@ -55,18 +55,18 @@ export default function NilaiTugas() {
         },
       })
         .then((response) => {
-          console.log(response, "<<< response");
+          // console.log(response, "<<< response");
           if (!response.ok) {
             throw new Error("Something Error Fetch assignmentn");
           }
           return response.json();
         })
         .then((data) => {
-          console.log(data, "ini data satuan");
+          // console.log(data, "ini data satuan");
 
           // console.log(data.deadline, "<<< deadline");
           const rubahDeadline = data.deadline.split("T")[0];
-          console.log(rubahDeadline, "<<<<< rubah deadline");
+          // console.log(rubahDeadline, "<<<<< rubah deadline");
           setEditSatu({
             description: data.description,
             CourseId: data.CourseId,
@@ -392,7 +392,7 @@ export default function NilaiTugas() {
 
   /////
   const next = (e) => {
-    console.log(page, "<<< page");
+    // console.log(page, "<<< page");
     e.preventDefault();
 
     if (page + 1 > totalPage) {
@@ -402,7 +402,7 @@ export default function NilaiTugas() {
     // dispatch(fetchAssignment(className, page));
   };
   const previous = (e) => {
-    console.log(page, "<<< page");
+    // console.log(page, "<<< page");
     e.preventDefault();
     if (page == 1) {
       return;
@@ -425,7 +425,7 @@ export default function NilaiTugas() {
   }
 
   return (
-    <div class="card mt-2 shadow " style={{ marginBottom: "370px" }}>
+    <div class="card mt-2 shadow ">
       <div className="container mt-2">
         <div className="row">
           <h2>Assignment List</h2>

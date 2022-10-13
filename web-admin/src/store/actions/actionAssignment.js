@@ -43,7 +43,7 @@ export const getAssignmentTugasguru = (payload) => {
 
 //! INI UNTUK FETCH Assignment Student ( COMPONENT NILAI TUGASS !!)
 export const fetchAssignment = (className, page, search) => {
-  console.log(className, "dari reducer");
+  // console.log(className, "dari reducer");
   return (dispatch) => {
     let url = `http://localhost:3000/teachers/assignmentGrades?size=5&page=${page}&className=${className}`;
     if (search) {
@@ -66,7 +66,7 @@ export const fetchAssignment = (className, page, search) => {
       })
       .then((data) => {
         dispatch(getAssignments(data));
-        console.log(data, "data dari reducer");
+        // console.log(data, "data dari reducer");
       });
   };
 };
@@ -109,7 +109,7 @@ export const addingAssignment = ({
 
 //! EDIT SCORE STUDENT NILAI TUGAS
 export const editAssignmentScores = ({ score, id }) => {
-  console.log(id, "masuk dari reeduxS");
+  // console.log(id, "masuk dari reeduxS");
   return (dispatch) => {
     return fetch(`http://localhost:3000/teachers/assignmentGrades/${id}`, {
       method: "PATCH",
@@ -195,7 +195,7 @@ export const fetchAssignmentGuru = (page) => {
       })
       .then((data) => {
         dispatch(getAssignmentTugasguru(data));
-        console.log(data, "<<< data guru");
+        // console.log(data, "<<< data guru");
       });
   };
 };
