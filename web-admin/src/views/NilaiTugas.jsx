@@ -13,12 +13,12 @@ export default function DaftarTugas() {
   const assignments = useSelector((state) => {
     return state.assignmentReducer.assignments;
   });
-  console.log(assignments, "<<< data di component");
+  // console.log(assignments, "<<< data di component");
   const totalPage = useSelector((state) => {
     return state.assignmentReducer.totalPage;
   });
-  console.log(totalPage, "dua bukan ?");
-  console.log(assignments, "data dari networkkk");
+  // console.log(totalPage, "dua bukan ?");
+  // console.log(assignments, "data dari networkkk");
   const [page, setPage] = useState(1);
 
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ export default function DaftarTugas() {
     id: "",
   });
 
-  console.log(idi, "ini id");
+  // console.log(idi, "ini id");
   useEffect(() => {
     fetch(`http://localhost:3000/teachers/assignmentGrades/${idi.id}`, {
       headers: {
@@ -46,7 +46,7 @@ export default function DaftarTugas() {
       },
     })
       .then((response) => {
-        console.log(response, "<<< response");
+        // console.log(response, "<<< response");
         if (!response.ok) {
           throw new Error("Something Error Fetch assignmentn");
         }
@@ -57,12 +57,12 @@ export default function DaftarTugas() {
           score: data.score,
           id: data.id,
         });
-        console.log(data, "ini data satuan");
+        // console.log(data, "ini data satuan");
       });
   }, [idi]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(assignments, "data");
+  // console.log(assignments, "data");
 
   const [editshow, seteditShow] = useState(false);
 
@@ -79,12 +79,12 @@ export default function DaftarTugas() {
   const [kelas, setKelas] = useState({
     className: "",
   });
-  console.log(kelas, "<< data kelas");
+  // console.log(kelas, "<< data kelas");
   let className = kelas.className;
   useEffect(() => {
     dispatch(fetchAssignment(className, page, name.name));
   }, [kelas]);
-  console.log(className, "<< KELAS");
+  // console.log(className, "<< KELAS");
   //! =========== INI UNTUK FILTER BY KELAS ========== //!
 
   const inputHandler = (e) => {
@@ -95,7 +95,7 @@ export default function DaftarTugas() {
   const [name, setName] = useState({
     name: "",
   });
-  console.log(assignments, "<< data rredux");
+  // console.log(assignments, "<< data rredux");
   // let dataFilter;
   // if (name.name == "") {
   //   dataFilter = assignments;
@@ -120,7 +120,7 @@ export default function DaftarTugas() {
     dispatch(fetchAssignment("", page));
   }, [page]);
   const next = (e) => {
-    console.log(page, "<<< page");
+    // console.log(page, "<<< page");
     e.preventDefault();
 
     if (page + 1 > totalPage) {
@@ -130,7 +130,7 @@ export default function DaftarTugas() {
     // dispatch(fetchAssignment(className, page));
   };
   const previous = (e) => {
-    console.log(page, "<<< page");
+    // console.log(page, "<<< page");
     e.preventDefault();
     if (page == 1) {
       return;
@@ -357,7 +357,7 @@ function EditModal(props) {
   const editken = (e) => {
     e.preventDefault();
     // console.log(edit.id, "editt");
-    console.log(id, "<<<<< id");
+    // console.log(id, "<<<<< id");
     dispatch(
       editAssignmentScores({
         id: id,
@@ -374,7 +374,7 @@ function EditModal(props) {
         timer: 1500,
       });
     });
-    console.log("masuk edit");
+    // console.log("masuk edit");
   };
 
   return (

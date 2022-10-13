@@ -8,7 +8,7 @@ export default function DaftarHadirPage() {
     return state.teacherReducer.attendances;
   });
   const [loading, setLoading] = useState(false);
-  console.log(attendances);
+  // console.log(attendances);
   const dispatch = useDispatch();
   const [kelas, setKelas] = useState({
     className: 9,
@@ -25,7 +25,7 @@ export default function DaftarHadirPage() {
     dispatch(fetchAttendance(kelas.className));
   }, [kelas]);
 
-  console.log(kelas.className, "<<<");
+  // console.log(kelas.className, "<<<");
 
   if (loading) {
     return (
